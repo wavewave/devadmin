@@ -7,6 +7,8 @@ import Distribution.Package
 import Distribution.PackageDescription
 import Distribution.PackageDescription.Parse
 
+import qualified Data.Map as M
+
 import Data.Maybe
 
 prog = "/home/wavewave/nfs/prog" 
@@ -44,6 +46,29 @@ getPkgName = name . pkgName . package . packageDescription
 
 combo f g = \x -> (f x , g x)
 
+matchDependentPackageName (Dependency (PackageName x)  _) = x
+  
+
+type DaughterMap = M.Map String [String]
+
+convertMotherMapToDaughterMap :: [(String,[String])] -> DaughterMap 
+convertMotherMapToDaughterMap = foldl mkDaughterMapWorker M.empty  
+  where mkDaughterMapWorker m c = let ps = snd c 
+                                  in  foldl (addmeToYourDaughterList c) m ps 
+        addmeToYourDaughterList c m p = let f Nothing = Just [fst c]
+                                            f (Just cs)  = Just (fst c:cs)    
+                                        in  M.alter f p m
+
+
+dotGraphEach :: (String,[String]) -> String
+dotGraphEach (m,ds) = 
+  let f x = ("\"" ++ m ++ "\" -> \"" ++ x ++ "\" ;\n") 
+  in  concatMap f ds 
+
+dotGraph :: [(String,[String])] -> String
+dotGraph lst = "digraph G { \n" ++ concatMap dotGraphEach lst ++ "\n } \n"
+  
+
 main = do
   putStrLn "welcome to dev-admin" 
   gdescs <- mapM (readPackageDescription normal . getCabalFileName) projects 
@@ -51,7 +76,9 @@ main = do
       
       motherlist = map (combo fst (filter (nameMatch projects). snd)) deps
   mapM_ (putStrLn . show ) motherlist 
-
-matchDependentPackageName (Dependency (PackageName x)  _) = x
-  
+  putStrLn "daughter map"
+  let daughterlist = M.toList ( convertMotherMapToDaughterMap motherlist )
+--  mapM_ (putStrLn . show ) )
+  putStrLn "-----------------------" 
+  writeFile "test.dot" $ dotGraph daughterlist
   
