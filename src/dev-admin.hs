@@ -1,6 +1,10 @@
 module Main where
 
 import System.FilePath 
+import System.IO
+import System.Environment
+import System.Process
+import System.Directory 
 
 import Distribution.Verbosity
 import Distribution.Package
@@ -27,6 +31,22 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "madgraph-auto"
            , ProgProj "madgraph-auto-model"
            , ProgProj "madgraph-auto-dataset"
+           , ProgProj "HROOT-generate"
+           , ProgProj "HROOT"
+           , ProgProj "MSSMType"
+           , ProgProj "MSSMScan"
+           , ProgProj "MSSMPlot" 
+           , ProgProj "LHEParser"
+           , ProgProj "simann"
+           , ProgProj "HEPMonteCarlo"
+           , ProgProj "ttbar"
+           , ProgProj "HEPUtil"
+           , ProgProj "iteratee-util"
+           , ProgProj "HStringTemplateHelpersIW"
+           , ProgProj "webdav-manager"
+           , ProgProj "issuetype" 
+           , ProgProj "ticketserver"
+           , ProgProj "ticketcli"
            ] 
 
 
@@ -81,4 +101,29 @@ main = do
 --  mapM_ (putStrLn . show ) )
   putStrLn "-----------------------" 
   writeFile "test.dot" $ dotGraph daughterlist
+
+
+mai2 = do 
+  args <- getArgs
+  putStrLn "welcome to dev-admin" 
+  gdescs <- mapM (readPackageDescription normal . getCabalFileName) projects 
+  let deps = map (combo getPkgName getDependency) gdescs
+      
+      motherlist = map (combo fst (filter (nameMatch projects). snd)) deps
+  mapM_ (putStrLn . show ) motherlist 
+  putStrLn "daughter map"
   
+  let dmap = convertMotherMapToDaughterMap motherlist
+      
+  mapM_ cabalInstallJob  $ fromJust .  M.lookup (args !! 0) $ dmap 
+  
+--  let daughterlist = M.toList ( convertMotherMapToDaughterMap motherlist )
+--  mapM_ (putStrLn . show ) )
+--  putStrLn "-----------------------" 
+--  writeFile "test.dot" $ dotGraph daughterlist
+
+
+cabalInstallJob name = do 
+  putStrLn $ "update : " ++  name
+  setCurrentDirectory (prog </> name)
+  system $ "cabal install"
