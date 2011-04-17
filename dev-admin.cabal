@@ -1,5 +1,5 @@
 Name:		dev-admin
-Version:	0.0
+Version:	0.0.1.0
 Synopsis:       dev-admin
 Description: 	dev-admin
 License: 	BSD3
@@ -10,11 +10,12 @@ Build-Type: 	Simple
 Cabal-Version:  >= 1.2
 
 
-Executable dev-admin
-  Main-is: dev-admin.hs
+Executable build 
+  Main-is: build.hs
   hs-source-dirs: src
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
   Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, 
-                 Cabal, containers 
+                 Cabal, containers, fgl, 
+                 parsec > 3 
 		 

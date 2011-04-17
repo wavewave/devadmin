@@ -15,14 +15,23 @@ import qualified Data.Map as M
 
 import Data.Maybe
 
-prog = "/home/wavewave/nfs/prog" 
-workspace = "/home/wavewave/nfs/workspace"
+import Data.Graph.Inductive 
+import Data.Graph.Inductive.Graph
+import Data.Graph.Inductive.Graphviz 
+
+import Text.Parsec
+import ParseConfig
+
+
+--prog = "/home/wavewave/nfs/prog" 
+--workspace = "/home/wavewave/nfs/workspace"
 
 -- projects = [ "ttbar" , "dmmcoll2" ] 
 -- workspace
 
 data Project = WorkspaceProj { workspacename :: String, projname :: String } 
              | ProgProj { projname :: String } 
+             deriving (Show,Eq,Ord) 
 
 projects = [ ProgProj "LHCOAnalysis" 
            , ProgProj "LHCOAnalysis-type" 
@@ -47,15 +56,24 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "issuetype" 
            , ProgProj "ticketserver"
            , ProgProj "ticketcli"
+           , ProgProj "dev-admin"
            ] 
 
+
+idproj :: [(Int,String)]
+idproj = zip [1..] . map projname $ projects
+
+idprojmap = M.fromList idproj
+
+projidmap = M.fromList $ map swap idproj
+  where swap (x,y) = (y,x)
 
 nameMatch :: [Project] -> String -> Bool
 nameMatch projs str = elem str (map projname projs)  
 
-getCabalFileName :: Project -> FilePath 
-getCabalFileName (ProgProj pname) = prog </> pname </> (pname ++ ".cabal")
-getCabalFileName (WorkspaceProj wname pname) 
+getCabalFileName :: (FilePath,FilePath) -> Project -> FilePath 
+getCabalFileName (prog,workspace) (ProgProj pname) = prog </> pname </> (pname ++ ".cabal")
+getCabalFileName (prog,workspace) (WorkspaceProj wname pname) 
   = workspace </> wname </> pname </> (pname ++ ".cabal") 
     
 getDependency = map matchDependentPackageName . condTreeConstraints . fromJust . condLibrary
@@ -89,41 +107,54 @@ dotGraph :: [(String,[String])] -> String
 dotGraph lst = "digraph G { \n" ++ concatMap dotGraphEach lst ++ "\n } \n"
   
 
-main = do
-  putStrLn "welcome to dev-admin" 
-  gdescs <- mapM (readPackageDescription normal . getCabalFileName) projects 
-  let deps = map (combo getPkgName getDependency) gdescs
+
+mkDepEdge :: (String, [String]) -> [(Int,Int,())]
+mkDepEdge (x,ys) = 
+  let idx = fromJust . M.lookup x $ projidmap 
+  in  map (mkDepEdgeSingle idx) ys
       
-      motherlist = map (combo fst (filter (nameMatch projects). snd)) deps
-  mapM_ (putStrLn . show ) motherlist 
-  putStrLn "daughter map"
-  let daughterlist = M.toList ( convertMotherMapToDaughterMap motherlist )
---  mapM_ (putStrLn . show ) )
-  putStrLn "-----------------------" 
-  writeFile "test.dot" $ dotGraph daughterlist
+mkDepEdgeSingle :: Int -> String -> (Int,Int,())       
+mkDepEdgeSingle idx y =
+  let idy = fromJust . M.lookup y $ projidmap 
+  in  (idx,idy,())
 
 
-mai2 = do 
-  args <- getArgs
-  putStrLn "welcome to dev-admin" 
-  gdescs <- mapM (readPackageDescription normal . getCabalFileName) projects 
-  let deps = map (combo getPkgName getDependency) gdescs
-      
-      motherlist = map (combo fst (filter (nameMatch projects). snd)) deps
-  mapM_ (putStrLn . show ) motherlist 
-  putStrLn "daughter map"
-  
-  let dmap = convertMotherMapToDaughterMap motherlist
-      
-  mapM_ cabalInstallJob  $ fromJust .  M.lookup (args !! 0) $ dmap 
-  
---  let daughterlist = M.toList ( convertMotherMapToDaughterMap motherlist )
---  mapM_ (putStrLn . show ) )
---  putStrLn "-----------------------" 
---  writeFile "test.dot" $ dotGraph daughterlist
-
-
-cabalInstallJob name = do 
+-- | need to be generalized
+cabalInstallJob :: FilePath -> String -> IO () 
+cabalInstallJob prog name = do 
   putStrLn $ "update : " ++  name
   setCurrentDirectory (prog </> name)
   system $ "cabal install"
+  return () 
+
+main :: IO ()
+main = do   
+  args <- getArgs 
+  homedir <- getEnv "HOME"
+  putStrLn $ "build " ++ (args !! 0)
+  putStrLn $ "reading " ++ (homedir </> ".build")
+  configstr <- readFile (homedir </> ".build")
+  let conf_result = parse configBuild "" configstr
+  case conf_result of 
+    Left err -> putStrLn (show err)
+    Right (p,w) -> do 
+      gdescs <- mapM (readPackageDescription normal . getCabalFileName (p,w) ) projects 
+      let deps = map (combo getPkgName getDependency) gdescs
+          motherlist = map (combo fst (filter (nameMatch projects). snd)) deps
+      mapM_ (putStrLn . show ) motherlist 
+      putStrLn "daughter map"
+    
+      let daughterlist = M.toList ( convertMotherMapToDaughterMap motherlist )
+          edgelist = concatMap  mkDepEdge daughterlist
+      let allnodes = idproj 
+          gr :: Gr String () 
+          gr = mkGraph allnodes edgelist
+      let linear = topsort gr  
+          strlst = map (\x->fromJust $ M.lookup x idprojmap) linear 
+      putStrLn $ show strlst 
+      let (l,r) = break (== args !! 0) strlst 
+      putStrLn $ show r
+      mapM_ (cabalInstallJob p)  r
+  
+
+
