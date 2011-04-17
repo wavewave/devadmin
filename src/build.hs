@@ -49,8 +49,10 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "issuetype" 
            , ProgProj "ticketserver"
            , ProgProj "ticketcli"
-           , ProgProj "dev-admin"
+--           , ProgProj "dev-admin"
            ] 
+
+--projects = [ ProgProj "dev-admin" ] 
 
 idproj :: [(Int,String)]
 idproj = zip [1..] . map projname $ projects
@@ -67,7 +69,7 @@ getCabalFileName :: (FilePath,FilePath) -> Project -> FilePath
 getCabalFileName (prog,workspace) (ProgProj pname) = prog </> pname </> (pname ++ ".cabal")
 getCabalFileName (prog,workspace) (WorkspaceProj wname pname) 
   = workspace </> wname </> pname </> (pname ++ ".cabal") 
-    
+
 getDependency = map matchDependentPackageName . condTreeConstraints . fromJust . condLibrary
 
 getPkgName = name . pkgName . package . packageDescription
@@ -132,18 +134,13 @@ main = do
       gdescs <- mapM (readPackageDescription normal . getCabalFileName (p,w) ) projects 
       let deps = map (combo getPkgName getDependency) gdescs
           motherlist = map (combo fst (filter (nameMatch projects). snd)) deps
-      mapM_ (putStrLn . show ) motherlist 
-      putStrLn "daughter map"
-    
-      let daughterlist = M.toList ( convertMotherMapToDaughterMap motherlist )
+          daughterlist = M.toList ( convertMotherMapToDaughterMap motherlist )
           edgelist = concatMap  mkDepEdge daughterlist
-      let allnodes = idproj 
+          allnodes = idproj 
           gr :: Gr String () 
           gr = mkGraph allnodes edgelist
-      let linear = topsort gr  
+          linear = topsort gr  
           strlst = map (\x->fromJust $ M.lookup x idprojmap) linear 
-      putStrLn $ show strlst 
       let (l,r) = break (== args !! 0) strlst 
-      putStrLn $ show r
-      mapM_ (cabalInstallJob p)  r
-  
+      mapM_ (cabalInstallJob p)  r 
+
