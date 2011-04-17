@@ -22,13 +22,6 @@ import Data.Graph.Inductive.Graphviz
 import Text.Parsec
 import ParseConfig
 
-
---prog = "/home/wavewave/nfs/prog" 
---workspace = "/home/wavewave/nfs/workspace"
-
--- projects = [ "ttbar" , "dmmcoll2" ] 
--- workspace
-
 data Project = WorkspaceProj { workspacename :: String, projname :: String } 
              | ProgProj { projname :: String } 
              deriving (Show,Eq,Ord) 
@@ -51,14 +44,13 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "ttbar"
            , ProgProj "HEPUtil"
            , ProgProj "iteratee-util"
-           , ProgProj "HStringTemplateHelpersIW"
+--           , ProgProj "HStringTemplateHelpersIW"
            , ProgProj "webdav-manager"
            , ProgProj "issuetype" 
            , ProgProj "ticketserver"
            , ProgProj "ticketcli"
            , ProgProj "dev-admin"
            ] 
-
 
 idproj :: [(Int,String)]
 idproj = zip [1..] . map projname $ projects
@@ -106,7 +98,6 @@ dotGraphEach (m,ds) =
 dotGraph :: [(String,[String])] -> String
 dotGraph lst = "digraph G { \n" ++ concatMap dotGraphEach lst ++ "\n } \n"
   
-
 
 mkDepEdge :: (String, [String]) -> [(Int,Int,())]
 mkDepEdge (x,ys) = 
@@ -156,5 +147,3 @@ main = do
       putStrLn $ show r
       mapM_ (cabalInstallJob p)  r
   
-
-
