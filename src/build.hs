@@ -14,6 +14,8 @@ import Distribution.PackageDescription.Parse
 import qualified Data.Map as M
 
 import Data.Maybe
+import Data.List 
+import Data.Function
 
 import Data.Graph.Inductive 
 import Data.Graph.Inductive.Graph
@@ -134,13 +136,36 @@ main = do
       gdescs <- mapM (readPackageDescription normal . getCabalFileName (p,w) ) projects 
       let deps = map (combo getPkgName getDependency) gdescs
           motherlist = map (combo fst (filter (nameMatch projects). snd)) deps
-          daughterlist = M.toList ( convertMotherMapToDaughterMap motherlist )
+          daughtermap = convertMotherMapToDaughterMap motherlist 
+          daughterlist = M.toList daughtermap 
           edgelist = concatMap  mkDepEdge daughterlist
           allnodes = idproj 
           gr :: Gr String () 
           gr = mkGraph allnodes edgelist
           linear = topsort gr  
           strlst = map (\x->fromJust $ M.lookup x idprojmap) linear 
-      let (l,r) = break (== args !! 0) strlst 
-      mapM_ (cabalInstallJob p)  r 
+     
+      let alldaughters = nub $ findAllDaughters daughtermap  (args !! 0)
+          numbered = map (\x -> findOrder x strlst) alldaughters 
+          finallist = map snd . sortBy (compare `on` fst) $ numbered 
 
+      mapM_ (cabalInstallJob p) finallist 
+
+--      putStrLn $ show finallist
+--      putStrLn (show daughterlist ) 
+--      putStrLn . show $ nub $   
+--       mapM_ (cabalInstallJob p)  r 
+
+findAllDaughters :: M.Map String [String] -> String -> [String] 
+findAllDaughters m c = do
+  case M.lookup c m of
+    Just ys -> do y <- ys 
+                  c : findAllDaughters m y 
+    Nothing -> return c
+
+
+findOrder :: String -> [String] -> (Int,String) 
+findOrder str strs = let (l,r) = break (== str) strs
+                     in  (length l,str)
+
+    
