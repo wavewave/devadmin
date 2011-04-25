@@ -2,8 +2,6 @@ module ParseConfig where
 
 import Text.Parsec 
 
-import System.FilePath ((</>))
-
 type ConfigParsec = Parsec String ()
 
 
