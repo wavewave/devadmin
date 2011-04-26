@@ -11,3 +11,18 @@ cabalInstallJob prog name = do
   setCurrentDirectory (prog </> name)
   system $ "cabal install"
   return () 
+
+
+darcsPushJob :: FilePath -> String -> IO () 
+darcsPushJob prog name = do 
+  putStrLn $ "darcs push : " ++  name
+  setCurrentDirectory (prog </> name)
+  system $ "darcs push"
+  return () 
+
+haddockJob :: FilePath -> String -> IO () 
+haddockJob prog name = do 
+  putStrLn $ "haddock : " ++ name 
+  setCurrentDirectory (prog </> name)
+  system $ "./haddock"
+  return () 

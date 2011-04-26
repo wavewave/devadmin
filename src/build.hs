@@ -23,13 +23,15 @@ import Cabal
 import Job
 
 import Control.Applicative
+import Control.Monad
 
 
 main :: IO ()
 main = do   
   args <- getArgs 
+  when (length args /= 2) $ error "2 arguments needed"
   homedir <- getEnv "HOME"
-  putStrLn $ "build " ++ (args !! 0)
+  putStrLn $ "build " ++ (args !! 0) ++ " " ++ (args !! 1) 
   putStrLn $ "reading " ++ (homedir </> ".build")
   configstr <- readFile (homedir </> ".build")
   let conf_result = parse configBuild "" configstr
@@ -48,11 +50,15 @@ main = do
           linear = topsort gr  
           strlst = map (\x->fromJust $ M.lookup x idprojmap) linear 
      
-      let alldaughters = nub $ findAllDaughters daughtermap  (args !! 0)
+      let alldaughters = nub $ findAllDaughters daughtermap  (args !! 1)
           numbered = map (\x -> findOrder x strlst) alldaughters 
           finallist = map snd . sortBy (compare `on` fst) $ numbered 
 
-      mapM_ (cabalInstallJob p) finallist 
+      let job = case (args !! 0) of 
+            "install" -> cabalInstallJob  p  
+            "push"    -> darcsPushJob     p 
+            "haddock" -> haddockJob       p 
+      mapM_ job finallist 
 
 --      putStrLn $ show finallist
 --      putStrLn (show daughterlist ) 
