@@ -4,6 +4,12 @@ import System.Directory
 import System.Process
 import System.FilePath
 
+depshowJob :: FilePath -> String -> IO () 
+depshowJob prog name = do 
+   putStrLn $ "currently working on " ++ name 
+
+
+
 -- | need to be generalized
 cabalInstallJob :: FilePath -> String -> IO () 
 cabalInstallJob prog name = do 
@@ -24,5 +30,5 @@ haddockJob :: FilePath -> String -> IO ()
 haddockJob prog name = do 
   putStrLn $ "haddock : " ++ name 
   setCurrentDirectory (prog </> name)
-  system $ "./haddock"
+  system $ "sh ./haddock"
   return () 
