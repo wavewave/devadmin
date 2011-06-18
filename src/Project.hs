@@ -28,6 +28,9 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "issuetype" 
            , ProgProj "ticketserver"
            , ProgProj "ticketcli"
+           , ProgProj "jobqueue-common"
+           , ProgProj "jobqueue-client"
+           , ProgProj "jobqueue-server"
 --           , ProgProj "dev-admin"
            ] 
 
