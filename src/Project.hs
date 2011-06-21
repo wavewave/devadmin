@@ -31,6 +31,7 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "jobqueue-common"
            , ProgProj "jobqueue-client"
            , ProgProj "jobqueue-server"
+           , ProgProj "configparser"
 --           , ProgProj "dev-admin"
            ] 
 
