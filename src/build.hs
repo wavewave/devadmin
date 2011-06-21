@@ -57,10 +57,10 @@ main = do
           finallist = map snd . sortBy (compare `on` fst) $ numbered 
 
       let job = case (args !! 0) of 
-            "install" -> cabalInstallJob  bc
-            "push"    -> darcsPushJob     bc
-            "haddock" -> haddockJob       bc
-            "depshow" -> depshowJob       bc 
+            "install" -> cabalInstallJob  p  
+            "push"    -> darcsPushJob     p 
+            "haddock" -> haddockJob       p 
+            "depshow" -> depshowJob       p 
       mapM_ job finallist 
 
 
