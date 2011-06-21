@@ -58,7 +58,8 @@ main = do
             "install" -> cabalInstallJob  p  
             "push"    -> darcsPushJob     p 
             "haddock" -> haddockJob       p 
-            "depshow" -> depshowJob       p 
+            "depshow" -> depshowJob       p
+            "pull"    -> darcsPullJob     p  
       mapM_ job finallist 
 
 --      putStrLn $ show finallist
