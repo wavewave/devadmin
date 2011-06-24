@@ -1,11 +1,7 @@
 module ParseConfig where
+import Config
 
-import Text.Parsec 
-
-type ConfigParsec = Parsec String ()
-
-
-
+{-
 configBuild :: ConfigParsec (FilePath,FilePath)
 configBuild = do 
   progbase      <- p_dir "progbase"
@@ -22,7 +18,7 @@ p_dir str = do
   many (char ' ')
   char '\n'
   return val
-
+-}
 
 
 

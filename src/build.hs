@@ -16,7 +16,7 @@ import Data.Graph.Inductive
 
 
 import Text.Parsec
-import ParseConfig
+import Config
 import Project
 import Graph
 import Cabal
@@ -37,7 +37,9 @@ main = do
   let conf_result = parse configBuild "" configstr
   case conf_result of 
     Left err -> putStrLn (show err)
-    Right (p,w) -> do 
+    Right bc -> do 
+      putStrLn $ show bc
+      let (p,w) = (,) <$> bc_progbase <*> bc_workspacebase $ bc
       gdescs <- mapM (readPackageDescription normal . getCabalFileName (p,w) ) projects 
       let deps = map ((,) <$> getPkgName <*> getDependency) gdescs
           motherlist = map ((,) <$> fst  <*> (filter (nameMatch projects). snd)) deps
@@ -55,16 +57,12 @@ main = do
           finallist = map snd . sortBy (compare `on` fst) $ numbered 
 
       let job = case (args !! 0) of 
-            "install" -> cabalInstallJob  p  
-            "push"    -> darcsPushJob     p 
-            "haddock" -> haddockJob       p 
-            "depshow" -> depshowJob       p 
+            "install" -> cabalInstallJob  bc
+            "push"    -> darcsPushJob     bc
+            "haddock" -> haddockJob       bc
+            "depshow" -> depshowJob       bc 
       mapM_ job finallist 
 
---      putStrLn $ show finallist
---      putStrLn (show daughterlist ) 
---      putStrLn . show $ nub $   
---       mapM_ (cabalInstallJob p)  r 
 
 
     
