@@ -1,3 +1,5 @@
+module VersionCheck where
+
 import Text.Parsec.Prim
 import Text.Parsec.Char
 import Text.Parsec.String
@@ -7,6 +9,10 @@ import System.FilePath ((</>))
 import System.Posix.Files 
 
 import System.Directory
+import System.Environment
+
+import Config
+
 --import System.Process
 
 isCabal :: String -> Bool 
@@ -32,21 +38,20 @@ nameVersion = do
   v <- cabalVersion 
   return (n,v)
   
-main = do 
+versioncheck :: BuildConfiguration -> IO ()
+versioncheck bc = do 
   putStrLn "version check"
   currdir <- getDirectoryContents "."
   let cabalfile = head $ filter isCabal currdir
   str <- readFile cabalfile 
   let Right (name,version) = parse nameVersion "" str
       filename = name ++ "-" ++ version
-      linkbase = "/home/wavewave/nfs/doc/prog" 
-      docbase  = "/home/wavewave/nfs/usr/share/doc"
-      linkpath = linkbase </> name 
-      origpath = docbase </> filename
+      linkpath = bc_linkbase bc </> name 
+      origpath = bc_docbase bc </> filename
   
   putStrLn $ "ln -s " ++ origpath ++ " " ++ linkpath
   
-  test <- getDirectoryContents linkbase  
+  test <- getDirectoryContents (bc_linkbase bc)
   
   if elem name test 
     then do 

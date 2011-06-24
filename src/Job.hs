@@ -4,39 +4,37 @@ import System.Directory
 import System.Process
 import System.FilePath
 
-depshowJob :: FilePath -> String -> IO () 
-depshowJob prog name = do 
+import Config
+import VersionCheck
+
+depshowJob :: BuildConfiguration -> String -> IO () 
+depshowJob bc name = do 
    putStrLn $ "currently working on " ++ name 
 
 
 
 -- | need to be generalized
-cabalInstallJob :: FilePath -> String -> IO () 
-cabalInstallJob prog name = do 
+cabalInstallJob :: BuildConfiguration -> String -> IO () 
+cabalInstallJob bc name = do 
   putStrLn $ "update : " ++  name
-  setCurrentDirectory (prog </> name)
+  setCurrentDirectory ((bc_progbase bc) </> name)
   system $ "cabal install"
   return () 
 
 
-darcsPushJob :: FilePath -> String -> IO () 
-darcsPushJob prog name = do 
+darcsPushJob :: BuildConfiguration -> String -> IO () 
+darcsPushJob bc name = do 
   putStrLn $ "darcs push : " ++  name
-  setCurrentDirectory (prog </> name)
+  setCurrentDirectory ((bc_progbase bc) </> name)
   system $ "darcs push"
-  return () 
-
-
-darcsPullJob :: FilePath -> String -> IO () 
-darcsPullJob prog name = do 
-  putStrLn $ "darcs pull : " ++  name
-  setCurrentDirectory (prog </> name)
-  system $ "darcs pull"
   return () 
 
 haddockJob :: FilePath -> String -> IO () 
 haddockJob prog name = do 
   putStrLn $ "haddock : " ++ name 
-  setCurrentDirectory (prog </> name)
-  system $ "sh ./haddock"
+  setCurrentDirectory ((bc_progbase bc) </> name)
+  system $ "cabal install --enable-documentation"
+  system $ "cabal haddock --hyperlink-source"
+  system $ "cabal install"
+  versioncheck bc
   return () 
