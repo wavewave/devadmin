@@ -9,7 +9,8 @@ data BuildConfiguration = BuildConfiguration {
   bc_progbase :: FilePath, 
   bc_workspacebase :: FilePath, 
   bc_linkbase :: FilePath, 
-  bc_docbase :: FilePath
+  bc_docbase :: FilePath, 
+  bc_hoogleDatabase :: FilePath
 } deriving (Show)
 
 
@@ -20,3 +21,4 @@ configBuild = do
                        <*> (oneFieldInput "workspacebase")
                        <*> (oneFieldInput "linkbase")
                        <*> (oneFieldInput "docbase")
+                       <*> (oneFieldInput "hoogle")
