@@ -62,6 +62,7 @@ main = do
             "haddock" -> haddockJob       bc
             "depshow" -> depshowJob       bc 
             "pull"    -> darcsPullJob     bc
+            "hoogle"  -> hoogleJob        bc
       mapM_ job finallist 
 
 
