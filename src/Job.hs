@@ -36,8 +36,15 @@ darcsPushJob bc name = do
   system $ "darcs push"
   return () 
 
-haddockJob :: FilePath -> String -> IO () 
-haddockJob prog name = do 
+darcsPullJob :: BuildConfiguration -> String -> IO () 
+darcsPullJob bc name = do 
+  putStrLn $ "darcs pull : " ++  name
+  setCurrentDirectory (bc_progbase bc </> name)
+  system $ "darcs pull"
+  return () 
+
+haddockJob :: BuildConfiguration -> String -> IO () 
+haddockJob bc name = do 
   putStrLn $ "haddock : " ++ name 
   setCurrentDirectory ((bc_progbase bc) </> name)
   system $ "cabal install --enable-documentation"
