@@ -49,7 +49,7 @@ haddockJob bc name = do
   setCurrentDirectory ((bc_progbase bc) </> name)
   system $ "cabal install --enable-documentation"
   system $ "cabal haddock --hyperlink-source"
-  system $ "cabal install"
+  system $ "cabal copy"
   versioncheck bc
   return () 
 
