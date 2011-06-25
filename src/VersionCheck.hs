@@ -13,8 +13,6 @@ import System.Environment
 
 import Config
 
---import System.Process
-
 isCabal :: String -> Bool 
 isCabal str 
   | length str > 6 = let ext = reverse . take 6 . reverse $ str in ext == ".cabal" 
@@ -60,16 +58,6 @@ versioncheck bc = do
     else do 
       putStrLn "doesn't exist" 
       return () 
-{-  putStrLn $ show test
-  b <- fileExist linkpath 
-  if b 
-     then do 
-       putStrLn $ "removing link" 
-       removeLink linkpath 
-     else do
-       putStrLn $ "doesn't exist"
-       return () -}
- {-  readProcess "ln" ["-s", origpath, linkpath] "" -} 
   createSymbolicLink origpath linkpath
     
   return () 

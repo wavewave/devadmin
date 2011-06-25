@@ -33,7 +33,7 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "jobqueue-server"
            , ProgProj "jobqueue-sender"
            , ProgProj "configparser"
-           , ProgProj "dev-admin"
+           , ProgProj "devadmin"
            ] 
 
 --projects = [ ProgProj "dev-admin" ] 

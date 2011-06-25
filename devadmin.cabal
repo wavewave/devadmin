@@ -1,5 +1,5 @@
-Name:		dev-admin
-Version:	0.0.8.0
+Name:		devadmin
+Version:	0.0.9.0
 Synopsis:       dev-admin
 Description: 	dev-admin
 License: 	BSD3
@@ -16,7 +16,8 @@ Library
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
   Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, 
-                 Cabal, containers, fgl, time,
+                 Cabal, containers, fgl, time, HStringTemplateHelpersIW,
+                 HStringTemplate,
                  parsec > 3, configparser
   Exposed-Modules: 
                    Config
@@ -24,9 +25,19 @@ Library
                    Job
                    Graph
                    VersionCheck
- 
+  Other-Modules:   
+                   Paths_devadmin 
 Executable build 
   Main-is: build.hs
+  hs-source-dirs: src
+  ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
+  ghc-prof-options: -caf-all -auto-all
+  Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, 
+                 Cabal, containers, fgl, time,
+                 parsec > 3 
+		 
+Executable html 
+  Main-is: html.hs
   hs-source-dirs: src
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
