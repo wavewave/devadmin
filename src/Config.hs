@@ -1,7 +1,7 @@
 module Config where
 
 import Text.Parsec 
-import HEP.Config.Parse
+import HEP.Parser.Config
 import Control.Monad.Identity
 import Control.Applicative
 
