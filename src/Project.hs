@@ -4,6 +4,18 @@ data Project = WorkspaceProj { workspacename :: String, projname :: String }
              | ProgProj { projname :: String } 
              deriving (Show,Eq,Ord) 
 
+partproj :: [Project] 
+partproj = [ ProgProj "jobqueue-common"
+           , ProgProj "jobqueue-client"
+           , ProgProj "jobqueue-server"
+           , ProgProj "jobqueue-sender"
+           , ProgProj "configparser"
+           , ProgProj "pipeline"
+           , ProgProj "madgraph-auto"
+           , ProgProj "madgraph-auto-model"
+           , ProgProj "madgraph-auto-dataset"
+           ] 
+
 projects :: [Project]
 projects = [ ProgProj "LHCOAnalysis" 
            , ProgProj "LHCOAnalysis-type" 
