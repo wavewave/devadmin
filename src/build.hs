@@ -56,14 +56,18 @@ main = do
           numbered = map (\x -> findOrder x strlst) alldaughters 
           finallist = map snd . sortBy (compare `on` fst) $ numbered 
 
-      let job = case (args !! 0) of 
-            "install" -> cabalInstallJob  bc
-            "push"    -> darcsPushJob     bc
-            "haddock" -> haddockJob       bc
-            "depshow" -> depshowJob       bc 
-            "pull"    -> darcsPullJob     bc
-            "hoogle"  -> hoogleJob        bc
-      mapM_ job finallist 
+      let projlist = map projname projects    
+   
+      case (args !! 0) of 
+        "install" -> flip mapM_ finallist (cabalInstallJob  bc)
+        "push"    -> flip mapM_ projlist  (darcsPushJob     bc)
+        "haddock" -> flip mapM_ finallist (haddockJob       bc)
+        "depshow" -> flip mapM_ finallist (depshowJob       bc)
+        "pull"    -> do 
+          putStrLn $ "projlist = " ++  (show projlist)
+          flip mapM_ projlist (darcsPullJob     bc)
+        "hoogle"  -> flip mapM_ finallist (hoogleJob        bc)
+
 
 
 
