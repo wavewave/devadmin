@@ -29,6 +29,14 @@ cabalInstallJob bc name = do
   return () 
 
 
+darcsWhatsnewJob :: BuildConfiguration -> String -> IO () 
+darcsWhatsnewJob bc name = do 
+  putStrLn $ "darcs whatsnew : " ++ name
+  setCurrentDirectory ((bc_progbase bc) </> name)
+  system $ "darcs whatsnew"
+  return () 
+  
+
 darcsPushJob :: BuildConfiguration -> String -> IO () 
 darcsPushJob bc name = do 
   putStrLn $ "darcs push : " ++  name
