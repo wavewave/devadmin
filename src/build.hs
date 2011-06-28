@@ -67,6 +67,8 @@ main = do
           putStrLn $ "projlist = " ++  (show projlist)
           flip mapM_ projlist (darcsPullJob     bc)
         "hoogle"  -> flip mapM_ finallist (hoogleJob        bc)
+        "whatsnew" -> flip mapM_ projlist (darcsWhatsnewJob bc)
+
 
 
 
