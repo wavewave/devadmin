@@ -68,8 +68,7 @@ main = do
           flip mapM_ projlist (darcsPullJob     bc)
         "hoogle"  -> flip mapM_ finallist (hoogleJob        bc)
         "whatsnew" -> flip mapM_ projlist (darcsWhatsnewJob bc)
-
-
+        "bootstrap" -> flip mapM_ projlist (cabalInstallJob bc)
 
 
 
