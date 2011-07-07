@@ -47,6 +47,7 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "jobqueue-sender"
            , ProgProj "configparser"
            , ProgProj "devadmin"
+           , ProgProj "hmatrixIW"
            ] 
 
 --projects = [ ProgProj "dev-admin" ] 
