@@ -14,6 +14,7 @@ partproj = [ ProgProj "jobqueue-common"
            , ProgProj "madgraph-auto"
            , ProgProj "madgraph-auto-model"
            , ProgProj "madgraph-auto-dataset"
+           , ProgProj "hmatrixIW"
            ] 
 
 projects :: [Project]
