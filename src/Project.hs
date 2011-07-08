@@ -48,6 +48,7 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "configparser"
            , ProgProj "devadmin"
            , ProgProj "hmatrixIW"
+           , ProgProj "clusteregg" 
            ] 
 
 --projects = [ ProgProj "dev-admin" ] 
