@@ -48,7 +48,12 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "configparser"
            , ProgProj "devadmin"
            , ProgProj "hmatrixIW"
-           , ProgProj "clusteregg" 
+           , ProgProj "enumerator-util"
+           , ProgProj "hournal"
+           , ProgProj "xournal-parser"
+           , ProgProj "xournal-render"
+           , ProgProj "xournal-web"
+--           , ProgProj "clusteregg" 
            ] 
 
 --projects = [ ProgProj "dev-admin" ] 

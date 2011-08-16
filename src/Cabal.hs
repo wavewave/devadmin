@@ -13,7 +13,10 @@ getPkgName = name . pkgName . package . packageDescription
   where name (PackageName str) = str 
 
 getDependency :: GenericPackageDescription -> [String]
-getDependency = map matchDependentPackageName . condTreeConstraints . fromJust . condLibrary
+getDependency desc = let rlib = condLibrary desc
+                     in case rlib of
+                          Nothing -> []
+                          Just lib -> map matchDependentPackageName . condTreeConstraints $ lib
 
 getCabalFileName :: (FilePath,FilePath) -> Project -> FilePath 
 getCabalFileName (prog,_workspace) (ProgProj pname) = prog </> pname </> (pname ++ ".cabal")
