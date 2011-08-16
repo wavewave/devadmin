@@ -25,7 +25,6 @@ import Job
 import Control.Applicative
 import Control.Monad
 
-
 main :: IO ()
 main = do   
   args <- getArgs 
@@ -57,7 +56,10 @@ main = do
           finallist = map snd . sortBy (compare `on` fst) $ numbered 
 
       let projlist = map projname projects    
-   
+
+      --  putStrLn $ show gdescs -- deps -- gdescs --  motherlist -- finallist
+
+
       case (args !! 0) of 
         "install" -> flip mapM_ finallist (cabalInstallJob  bc)
         "push"    -> flip mapM_ projlist  (darcsPushJob     bc)
