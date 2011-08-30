@@ -4,11 +4,11 @@ import System.FilePath
 import System.Environment
 
 import Text.Parsec
-import Config
-import Project
-import Graph
-import Cabal
-import Job
+import Application.DevAdmin.Config
+import Application.DevAdmin.Project
+import Application.DevAdmin.Graph
+import Application.DevAdmin.Cabal
+import Application.DevAdmin.Job
 
 import Control.Applicative
 import Control.Monad

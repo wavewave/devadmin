@@ -3,7 +3,7 @@
 module Main where
 
 import Data.List
-import Project
+import Application.DevAdmin.Project
 import System.Console.CmdArgs
 
 data Devconfig = Hoogle | Other 

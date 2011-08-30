@@ -1,8 +1,8 @@
-module Cabal where
+module Application.DevAdmin.Cabal where
 
 import System.FilePath
 import Data.Maybe
-import Project
+import Application.DevAdmin.Project
 
 
 import Distribution.Package

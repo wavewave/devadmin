@@ -1,4 +1,4 @@
-module Job where
+module Application.DevAdmin.Job where
 
 import Control.Applicative
 
@@ -9,9 +9,9 @@ import System.FilePath
 import Text.StringTemplate
 import Text.StringTemplate.Helpers
 
-import Config
-import Project
-import VersionCheck
+import Application.DevAdmin.Config
+import Application.DevAdmin.Project
+import Application.DevAdmin.VersionCheck
 import Paths_devadmin
 
 depshowJob :: BuildConfiguration -> String -> IO () 

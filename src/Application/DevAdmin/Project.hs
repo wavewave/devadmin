@@ -1,4 +1,4 @@
-module Project where
+module Application.DevAdmin.Project where
 
 data Project = WorkspaceProj { workspacename :: String, projname :: String } 
              | ProgProj { projname :: String } 

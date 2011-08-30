@@ -1,4 +1,4 @@
-module StatusControl where
+module Application.DevAdmin.StatusControl where
 
 import Data.Time
 
