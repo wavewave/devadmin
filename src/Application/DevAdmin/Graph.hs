@@ -1,8 +1,8 @@
-module Graph where
+module Application.DevAdmin.Graph where
 
 import Data.Maybe
 import qualified Data.Map as M
-import Project
+import Application.DevAdmin.Project
 
 type DaughterMap = M.Map String [String]
 

@@ -1,4 +1,4 @@
-module Config where
+module Application.DevAdmin.Config where
 
 import Text.Parsec 
 import HEP.Parser.Config

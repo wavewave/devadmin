@@ -1,5 +1,5 @@
 Name:		devadmin
-Version:	0.1.3.3
+Version:	0.2
 Synopsis:       dev-admin
 Description: 	dev-admin
 License: 	BSD3
@@ -20,11 +20,11 @@ Library
                  HStringTemplate,
                  parsec > 3, configparser
   Exposed-Modules: 
-                   Config
-                   StatusControl
-                   Job
-                   Graph
-                   VersionCheck
+                   Application.DevAdmin.Config
+                   Application.DevAdmin.StatusControl
+                   Application.DevAdmin.Job
+                   Application.DevAdmin.Graph
+                   Application.DevAdmin.VersionCheck
   Other-Modules:   
                    Paths_devadmin 
 Executable build 

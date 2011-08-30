@@ -1,4 +1,4 @@
-module VersionCheck where
+module Application.DevAdmin.VersionCheck where
 
 import Text.Parsec.Prim
 import Text.Parsec.Char
@@ -11,7 +11,7 @@ import System.Posix.Files
 import System.Directory
 import System.Environment
 
-import Config
+import Application.DevAdmin.Config
 
 isCabal :: String -> Bool 
 isCabal str 
