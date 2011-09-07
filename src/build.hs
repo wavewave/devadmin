@@ -83,6 +83,7 @@ main = do
         "hoogle"  -> flip mapM_ finallist (hoogleJob        bc)
         "whatsnew" -> flip mapM_ allorderedlist (darcsWhatsnewJob bc)
         "bootstrap" -> flip mapM_ allorderedlist (cabalInstallJob bc)
+        "haddockboot" -> mapM_ (haddockJob bc) allorderedlist 
         _ -> error "no such option"
 
 
