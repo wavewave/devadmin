@@ -15,18 +15,11 @@ Library
   hs-source-dirs: src
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, 
-                 Cabal, containers, fgl, time, HStringTemplateHelpersIW,
-                 HStringTemplate,
-                 parsec > 3, configparser
-  Exposed-Modules: 
-                   Application.DevAdmin.Config
-                   Application.DevAdmin.StatusControl
-                   Application.DevAdmin.Job
-                   Application.DevAdmin.Graph
-                   Application.DevAdmin.VersionCheck
+  Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, Cabal, containers, fgl, time, HStringTemplateHelpersIW, HStringTemplate, parsec > 3, configparser
   Other-Modules:   
                    Paths_devadmin 
+  exposed-modules: Application.DevAdmin.Cabal, Application.DevAdmin.Config, Application.DevAdmin.Graph, Application.DevAdmin.Job, Application.DevAdmin.Project, Application.DevAdmin.StatusControl, Application.DevAdmin.VersionCheck
+
 Executable build 
   Main-is: build.hs
   hs-source-dirs: src

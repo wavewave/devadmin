@@ -1,7 +1,7 @@
 module Application.DevAdmin.Cabal where
 
 import System.FilePath
-import Data.Maybe
+-- import Data.Maybe
 import Application.DevAdmin.Project
 
 

@@ -5,14 +5,7 @@ import System.Environment
 
 import Text.Parsec
 import Application.DevAdmin.Config
-import Application.DevAdmin.Project
-import Application.DevAdmin.Graph
-import Application.DevAdmin.Cabal
 import Application.DevAdmin.Job
-
-import Control.Applicative
-import Control.Monad
-
 
 main :: IO ()
 main = do   
