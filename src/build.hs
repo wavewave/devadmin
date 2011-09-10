@@ -65,7 +65,7 @@ main = do
   case conf_result of 
     Left err -> putStrLn (show err)
     Right bc -> do
-      let projlist = map projname projects 
+--      let projlist = map projname projects 
       finallist <- makeProjDepList bc [args !! 1]
       allorderedlist <- makeProjDepList bc (map projname projects)
 --      putStrLn $ show projlist

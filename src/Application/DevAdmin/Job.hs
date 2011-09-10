@@ -15,7 +15,7 @@ import Application.DevAdmin.VersionCheck
 import Paths_devadmin
 
 depshowJob :: BuildConfiguration -> String -> IO () 
-depshowJob bc name = do 
+depshowJob _bc name = do 
    putStrLn $ "currently working on " ++ name 
 
 
@@ -84,16 +84,16 @@ updateHtml bc = do
   writeFile ((bc_linkbase bc) </> "proghtml.html") str
 
 progbody :: BuildConfiguration -> Project -> IO String
-progbody bc (ProgProj projname) = do 
+progbody bc (ProgProj prjname) = do 
   tmpldir <- (</> "template") <$> getDataDir
   templates <- directoryGroup tmpldir
   let str = renderTemplateGroup
               templates 
               [ ("progindexhtml", "file://" </> (bc_linkbase bc) 
-                                            </> projname 
+                                            </> prjname 
                                             </> "html/index.html") 
-              , ("progname", projname) ] 
+              , ("progname", prjname) ] 
               "progbody.html"
   return str 
-
+progbody _ _ = error "no match error in progbody"
  
