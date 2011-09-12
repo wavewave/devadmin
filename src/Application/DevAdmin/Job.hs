@@ -24,6 +24,7 @@ depshowJob _bc name = do
 cabalInstallJob :: BuildConfiguration -> String -> IO () 
 cabalInstallJob bc name = do 
   putStrLn $ "update : " ++  name
+  system $ "ghc-pkg --force unregister " ++ name
   setCurrentDirectory ((bc_progbase bc) </> name)
   system $ "cabal install"
   return () 
