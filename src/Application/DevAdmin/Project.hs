@@ -53,6 +53,7 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "xournal-parser"
            , ProgProj "xournal-render"
            , ProgProj "xournal-web"
+           , ProgProj "scaffold"
 --           , ProgProj "clusteregg" 
            ] 
 
