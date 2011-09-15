@@ -54,7 +54,7 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "xournal-render"
            , ProgProj "xournal-web"
            , ProgProj "scaffold"
-           , ProgProj "LHECleaner"
+           , ProgProj "LHE-sanitizer"
 --           , ProgProj "clusteregg" 
            ] 
 
