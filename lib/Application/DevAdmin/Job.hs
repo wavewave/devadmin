@@ -5,6 +5,7 @@ import Control.Applicative
 import System.Directory
 import System.Process
 import System.FilePath
+import System.Exit 
 
 import Text.StringTemplate
 import Text.StringTemplate.Helpers
@@ -34,7 +35,16 @@ darcsWhatsnewJob :: BuildConfiguration -> String -> IO ()
 darcsWhatsnewJob bc name = do 
   putStrLn $ "darcs whatsnew : " ++ name
   setCurrentDirectory ((bc_progbase bc) </> name)
-  system $ "darcs whatsnew"
+  excode <- system $ "darcs whatsnew"
+  case excode of 
+    ExitSuccess -> do 
+      putStrLn "some change happened. would you proceed to the next? (Y/N)" 
+      c <- getLine
+      if (not.null $ c) &&  (head c == 'y' || head c == 'Y')
+        then return () 
+        else darcsWhatsnewJob bc name 
+    ExitFailure 1 -> return () 
+    _ -> error $ "do not know what to do in whatsnew job " ++ name 
   return () 
   
 
