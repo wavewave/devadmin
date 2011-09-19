@@ -8,12 +8,26 @@ import Application.DevAdmin.Config
 import Application.DevAdmin.Job
 import Application.DevAdmin.ProgType
 
+import Data.List 
+
+-- import Control.Applicative
+
 commandLineProcess :: BuildConfiguration ->  Build -> IO () 
 commandLineProcess bc bparam = do 
   alllst <- makeProjDepList bc (map projname projects)
   case bparam of 
     Install {..}     -> do plst <- makeProjDepList bc [pkgname]
                            flip mapM_ plst   (cabalInstallJob bc)
+    InstallSeg {..}  -> do plst <- makeProjDepList bc [pkgnamemother] 
+                           putStrLn $ show plst 
+                           mmap <- (constructMotherMap bc)
+                           let rallmothers = findAllMothers mmap pkgnamedest
+                           case rallmothers of 
+                             Nothing -> return () 
+                             Just allmothers -> do 
+                               let flst = intersect plst allmothers
+                               (putStrLn.show) flst 
+                               flip mapM_ flst (cabalInstallJob bc)
     Push    {..}     ->    flip mapM_ alllst (darcsPushJob bc)
     Haddock {..}     -> do plst <- makeProjDepList bc [pkgname]
                            flip mapM_ plst   (haddockJob bc)
