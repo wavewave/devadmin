@@ -1,5 +1,5 @@
 Name:		devadmin
-Version:	0.2.3.2
+Version:	0.2.999
 Synopsis:       dev-admin
 Description: 	dev-admin
 License: 	BSD3
@@ -7,43 +7,52 @@ License-file:	LICENSE
 Author:		Ian-Woo Kim
 Maintainer: 	Ian-Woo Kim <ianwookim@gmail.com>
 Build-Type: 	Simple
-Cabal-Version:  >= 1.2
+Cabal-Version:  >= 1.8
 data-files:     template/*.html.st
 
 
 Library
-  hs-source-dirs: src
+  hs-source-dirs: lib
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, Cabal, containers, fgl, time, HStringTemplateHelpersIW, HStringTemplate, parsec > 3, configparser
+  Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, Cabal, containers, fgl, time, HStringTemplateHelpersIW, HStringTemplate, parsec > 3, configparser, cmdargs
   Other-Modules:   
                    Paths_devadmin 
-  exposed-modules: Application.DevAdmin.Cabal, Application.DevAdmin.Config, Application.DevAdmin.Graph, Application.DevAdmin.Job, Application.DevAdmin.Project, Application.DevAdmin.StatusControl, Application.DevAdmin.VersionCheck
+  exposed-modules: Application.DevAdmin.Cabal, 
+                   Application.DevAdmin.Config, 
+                   Application.DevAdmin.Graph, 
+                   Application.DevAdmin.Job, 
+                   Application.DevAdmin.Project, 
+                   Application.DevAdmin.StatusControl, 
+                   Application.DevAdmin.VersionCheck, 
+                   Application.DevAdmin.ProgType, 
+                   Application.DevAdmin.Command
 
 Executable build 
   Main-is: build.hs
-  hs-source-dirs: src
+  hs-source-dirs: exe
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, 
-                 Cabal, containers, fgl, time,
-                 parsec > 3 
+  Build-Depends: base>4, filepath>1, devadmin >= 0.2.999,
+                 parsec > 3, cmdargs
 		 
 Executable html 
   Main-is: html.hs
-  hs-source-dirs: src
+  hs-source-dirs: exe
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
   Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, 
                  Cabal, containers, fgl, time,
-                 parsec > 3 
+                 parsec > 3, devadmin >= 0.2.999
 		 
 Executable devconfig 
   Main-is: devconfig.hs
-  hs-source-dirs: src
+  hs-source-dirs: exe
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, mtl>2, cmdargs
+  Build-Depends: base>4, mtl>2, cmdargs, devadmin >= 0.2.999
+
+
 		 
 
 
