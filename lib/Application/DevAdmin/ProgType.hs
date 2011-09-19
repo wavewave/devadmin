@@ -8,6 +8,9 @@ import System.FilePath
 
 data Build = Install     { config :: FilePath 
                          , pkgname :: String }
+           | InstallSeg  { config :: FilePath 
+                         , pkgnamemother :: String 
+                         , pkgnamedest :: String } 
            | Push        { config :: FilePath }
            | Haddock     { config :: FilePath 
                          , pkgname :: String } 
@@ -26,6 +29,9 @@ constructBuildModes = do
   let dotbuild = homedir </> ".build"
   let install = Install { config = dotbuild 
                         , pkgname = "" &= typ "PKGNAME" &= argPos 0 }
+      installseg = InstallSeg { config = dotbuild 
+                              , pkgnamemother = "" &= typ "PKGMOTHER" &= argPos 0 
+                              , pkgnamedest = "" &= typ "PKGDEST" &= argPos 1 }
       push    = Push    { config = dotbuild }
       haddock = Haddock { config = dotbuild 
                         , pkgname = "" &= typ "PKGNAME" &= argPos 0 } 
@@ -37,8 +43,8 @@ constructBuildModes = do
       bootstrap = Bootstrap { config = dotbuild } 
       haddockboot = HaddockBoot { config = dotbuild } 
 
-      mode = modes [ install, push, haddock, depshow, pull, hoogle
-                   , whatsnew, bootstrap, haddockboot ] 
+      mode = modes [ install, installseg, push, haddock, depshow, pull
+                   , hoogle, whatsnew, bootstrap, haddockboot ] 
               
   return mode 
                         

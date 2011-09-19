@@ -4,6 +4,7 @@ import Data.Maybe
 import Data.List 
 import Data.Function
 import Data.Graph.Inductive
+-- import Data.Foldable hiding (concatMap,elem,foldl)
 
 import qualified Data.Map as M
 
@@ -31,8 +32,6 @@ projidmap = M.fromList $ map swap idproj
 
 nameMatch :: [Project] -> String -> Bool
 nameMatch projs str = elem str (map projname projs)  
-
-
 
 convertMotherMapToDaughterMap :: [(String,[String])] -> DaughterMap 
 convertMotherMapToDaughterMap = foldl mkDaughterMapWorker M.empty  
@@ -74,6 +73,30 @@ findAllDaughters m c = do
 findOrder :: String -> [String] -> (Int,String) 
 findOrder str strs = let (l,_r) = break (== str) strs
                      in  (length l,str)
+
+
+constructMotherMap ::  BuildConfiguration -> IO (M.Map String [String])
+constructMotherMap bc = do 
+  let (p,w) = (,) <$> bc_progbase <*> bc_workspacebase $ bc
+  gdescs <- mapM (readPackageDescription normal . getCabalFileName (p,w) ) projects
+  let deps = map ((,) <$> getPkgName <*> getDependency) gdescs
+      mlst = map ((,) <$> fst  <*> (filter (nameMatch projects). snd)) deps
+  return (M.fromList mlst)
+
+
+findAllMothers :: M.Map String [String] -> String -> Maybe [String] 
+findAllMothers m proj = 
+  case M.lookup proj m of 
+    Nothing  -> Nothing  -- [] -- return proj 
+    Just lst ->  
+      if null lst 
+        then return [proj] 
+        else do  
+          allmothers <- mapM (\x -> findAllMothers m x >>= (\xs -> return (x : xs))) lst  
+          return $ nub (concat allmothers)
+                        
+--   in nub tresult  
+-- findAllMothers 
 
 
 makeProjDepOrderList :: BuildConfiguration -> IO (DaughterMap,[String])
