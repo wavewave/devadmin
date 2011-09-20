@@ -56,6 +56,7 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "scaffold"
            , ProgProj "LHE-sanitizer"
            , ProgProj "jobtester"
+           , ProgProj "mathematica-data"
 --           , ProgProj "clusteregg" 
            ] 
 
