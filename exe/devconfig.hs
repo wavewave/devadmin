@@ -2,6 +2,7 @@
 
 module Main where
 
+import Data.Char
 import Data.List
 import Application.DevAdmin.Project
 import System.Console.CmdArgs
@@ -17,7 +18,7 @@ commandProcess Hoogle = do
   let strs = intercalate " " (map f partproj)
   putStr strs 
  where f x = case x of 
-               ProgProj str -> '+' : str
+               ProgProj str -> '+' : map toLower str
                _ -> undefined   
 commandProcess Other = do 
   putStrLn "" 

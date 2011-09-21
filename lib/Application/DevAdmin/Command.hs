@@ -33,6 +33,8 @@ commandLineProcess bc bparam = do
                            flip mapM_ plst   (haddockJob bc)
     DepShow {..}     -> do plst <- makeProjDepList bc [pkgname]
                            flip mapM_ plst   (depshowJob bc)
+    DirectDepShow {..} -> do lst <- makeProjDirectDepList bc pkgname
+                             putStrLn $ show lst 
     Pull {..}        ->    flip mapM_ alllst (darcsPullJob bc)
     Hoogle {..}      ->    flip mapM_ alllst (hoogleJob bc)
     Whatsnew {..}    ->    flip mapM_ alllst (darcsWhatsnewJob bc)
