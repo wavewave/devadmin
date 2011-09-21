@@ -23,6 +23,7 @@ data Build = Install     { config :: FilePath
            | Whatsnew    { config :: FilePath } 
            | Bootstrap   { config :: FilePath } 
            | HaddockBoot { config :: FilePath }
+           | Bridge      { config :: FilePath } 
              deriving (Show,Data,Typeable)
 
 constructBuildModes :: IO Build 
@@ -46,10 +47,11 @@ constructBuildModes = do
       whatsnew = Whatsnew { config = dotbuild } 
       bootstrap = Bootstrap { config = dotbuild } 
       haddockboot = HaddockBoot { config = dotbuild } 
+      bridge = Bridge { config = dotbuild }
 
       mode = modes [ install, installseg, push, haddock, directdepshow
-                   , depshow, pull
-                   , hoogle, whatsnew, bootstrap, haddockboot ] 
+                   , depshow, pull, hoogle, whatsnew, bootstrap
+                   , haddockboot, bridge ] 
               
   return mode 
                         

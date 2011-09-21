@@ -85,6 +85,24 @@ hoogleJob bc name = do
   return () 
 
 
+bridgeJob :: BuildConfiguration -> String -> IO () 
+bridgeJob bc name = do 
+  putStrLn $ "bridge : " ++ name
+  let progdir = bc_progbase bc </> name 
+      bridgedir = bc_bridgebase bc </> name ++ "_bridge" 
+      bridgedarcs = bridgedir </> name
+      bridgegit = bridgedir </> name ++ "_git"
+      gitdir = bc_gitbase bc </> name ++ "_git"
+  setCurrentDirectory ((bc_progbase bc) </> name) 
+  system $ "darcs push " ++ bridgedarcs
+  setCurrentDirectory (bc_bridgebase bc) 
+  system $ "darcs-fastconvert sync " ++ (name ++ "_bridge") ++ " git"
+  setCurrentDirectory gitdir
+  system $ "git pull " ++ bridgegit
+  system $ "git push github master" 
+  return () 
+
+
 
 updateHtml :: BuildConfiguration -> IO () 
 updateHtml bc = do 
