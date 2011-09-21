@@ -77,7 +77,11 @@ hoogleJob bc name = do
   putStrLn $ "hoogle : " ++ name
   setCurrentDirectory ((bc_progbase bc) </> name) 
   system $ "cabal haddock --hoogle" 
-  copyFile ((bc_progbase bc) </> name </> "dist/doc/html" </> name </> name ++ ".txt") ((bc_hoogleDatabase bc) </> name ++ ".txt")
+  let hooglefile = (bc_progbase bc) </> name </> "dist/doc/html" </> name </> name ++ ".txt"
+  b <- doesFileExist hooglefile 
+  if b 
+    then copyFile hooglefile  ((bc_hoogleDatabase bc) </> name ++ ".txt")
+    else putStrLn $ "no such file : " ++ hooglefile 
   return () 
 
 

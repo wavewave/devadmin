@@ -16,6 +16,8 @@ data Build = Install     { config :: FilePath
                          , pkgname :: String } 
            | DepShow     { config :: FilePath
                          , pkgname :: String } 
+           | DirectDepShow     { config :: FilePath
+                               , pkgname :: String } 
            | Pull        { config :: FilePath }
            | Hoogle      { config :: FilePath } 
            | Whatsnew    { config :: FilePath } 
@@ -37,13 +39,16 @@ constructBuildModes = do
                         , pkgname = "" &= typ "PKGNAME" &= argPos 0 } 
       depshow = DepShow { config = dotbuild 
                         , pkgname = "" &= typ "PKGNAME" &= argPos 0 } 
+      directdepshow = DirectDepShow { config = dotbuild 
+                                    , pkgname = "" &= typ "PKGNAME" &= argPos 0 } 
       pull    = Pull    { config = dotbuild }
       hoogle  = Hoogle  { config = dotbuild } 
       whatsnew = Whatsnew { config = dotbuild } 
       bootstrap = Bootstrap { config = dotbuild } 
       haddockboot = HaddockBoot { config = dotbuild } 
 
-      mode = modes [ install, installseg, push, haddock, depshow, pull
+      mode = modes [ install, installseg, push, haddock, directdepshow
+                   , depshow, pull
                    , hoogle, whatsnew, bootstrap, haddockboot ] 
               
   return mode 

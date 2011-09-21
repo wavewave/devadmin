@@ -125,4 +125,10 @@ makeProjDepList bc projs = do
       finallist = map snd . sortBy (compare `on` fst) $ numbered 
   return finallist
 
-
+makeProjDirectDepList :: BuildConfiguration -> String -> IO [String]
+makeProjDirectDepList bc proj = do 
+  (daughtermap,_) <- makeProjDepOrderList bc 
+  let r = M.lookup proj daughtermap 
+  case r of 
+    Nothing -> return [] 
+    Just lst -> return lst
