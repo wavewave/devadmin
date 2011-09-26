@@ -40,5 +40,6 @@ commandLineProcess bc bparam = do
     Whatsnew {..}    ->    flip mapM_ alllst (darcsWhatsnewJob bc)
     Bootstrap {..}   ->    flip mapM_ alllst (cabalInstallJob bc)
     HaddockBoot {..} ->    flip mapM_ alllst (haddockJob bc)
-    Bridge {..}      -> mapM_ (bridgeJob bc) (map projname bridgedproj)
+    Bridge {..} -> bridgeJob bc pkgname
+    BridgeAll {..}      -> mapM_ (bridgeJob bc) (map projname bridgedproj)
     CreateBridge {..} ->  createBridgeJob bc pkgname
