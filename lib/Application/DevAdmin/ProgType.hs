@@ -74,7 +74,9 @@ data Build = Install     { config :: FilePath
            | Whatsnew    { config :: FilePath } 
            | Bootstrap   { config :: FilePath } 
            | HaddockBoot { config :: FilePath }
-           | Bridge      { config :: FilePath } 
+           | Bridge      { config :: FilePath 
+                         , pkgname :: String }
+           | BridgeAll   { config :: FilePath } 
            | CreateBridge { config :: FilePath 
                           , pkgname :: String } 
              deriving (Show,Data,Typeable)
@@ -100,13 +102,15 @@ constructBuildModes = do
       whatsnew = Whatsnew { config = dotbuild } 
       bootstrap = Bootstrap { config = dotbuild } 
       haddockboot = HaddockBoot { config = dotbuild } 
-      bridge = Bridge { config = dotbuild }
+      bridge = Bridge { config = dotbuild 
+                      , pkgname = "" &= typ "PKGNAME" &= argPos 0 }
+      bridgeall = BridgeAll { config = dotbuild } 
       createbridge = CreateBridge { config = dotbuild 
                                   , pkgname = "" &= typ "PKGNAME" &= argPos 0 }
 
       mode = modes [ install, installseg, push, haddock, directdepshow
                    , depshow, pull, hoogle, whatsnew, bootstrap
-                   , haddockboot, bridge, createbridge ] 
+                   , haddockboot, bridge, bridgeall, createbridge ] 
               
   return mode 
                         
