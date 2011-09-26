@@ -4,6 +4,11 @@ data Project = WorkspaceProj { workspacename :: String, projname :: String }
              | ProgProj { projname :: String } 
              deriving (Show,Eq,Ord) 
 
+-- | Part of projects that are availabe in haddock 
+--
+--   > test
+--
+
 partproj :: [Project] 
 partproj = [ ProgProj "LHCOAnalysis" 
            , ProgProj "LHCOAnalysis-type" 
