@@ -36,7 +36,8 @@ commandLineProcess bc bparam = do
     DirectDepShow {..} -> do lst <- makeProjDirectDepList bc pkgname
                              putStrLn $ show lst 
     Pull {..}        ->    flip mapM_ alllst (darcsPullJob bc)
-    Hoogle {..}      ->    flip mapM_ alllst (hoogleJob bc)
+    Hoogle {..}      ->    hoogleJob bc pkgname
+    HoogleAll {..}   ->    flip mapM_ alllst (hoogleJob bc)
     Whatsnew {..}    ->    flip mapM_ alllst (darcsWhatsnewJob bc)
     Bootstrap {..}   ->    flip mapM_ alllst (cabalInstallJob bc)
     HaddockBoot {..} ->    flip mapM_ alllst (haddockJob bc)
