@@ -25,7 +25,7 @@ commandLineProcess bc bparam = do
                            case rallmothers of 
                              Nothing -> return () 
                              Just allmothers -> do 
-                               let flst = intersect plst allmothers
+                               let flst = intersect plst (pkgnamedest:allmothers)
                                (putStrLn.show) flst 
                                flip mapM_ flst (cabalInstallJob bc)
     Push    {..}     ->    flip mapM_ alllst (darcsPushJob bc)
