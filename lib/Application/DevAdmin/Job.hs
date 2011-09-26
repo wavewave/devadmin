@@ -102,6 +102,34 @@ bridgeJob bc name = do
   system $ "git push github master" 
   return () 
 
+createBridgeJob :: BuildConfiguration -> String -> IO () 
+createBridgeJob bc name = do 
+  putStrLn $ "create bridge : " ++ name
+  let progdir = bc_progbase bc </> name 
+      bridgedir = bc_bridgebase bc </> name ++ "_bridge" 
+      bridgedarcs = bridgedir </> name
+      bridgegit = bridgedir </> name ++ "_git"
+      gitdir = bc_gitbase bc </> name ++ "_git"
+--  setCurrentDirectory ((bc_progbase bc) </> name) 
+--  system $ "darcs push " ++ bridgedarcs
+  setCurrentDirectory (bc_bridgebase bc) 
+  system $ "darcs-fastconvert create-bridge " ++ progdir 
+  setCurrentDirectory (bc_gitbase bc) 
+  system $ "git clone " ++ bridgegit 
+  setCurrentDirectory bridgegit 
+  system $ "git remote add github git@github.com:wavewave/" ++ name  ++ ".git"
+  putStrLn $ "please make " ++ name ++ " on github. Did you do?"
+
+  x <- getLine
+  if head x == 'y' || head x == 'Y'  
+    then system "git push github master " >> return () 
+    else putStrLn "later, please do git push github master " 
+
+{-
+  system $ "git pull " ++ bridgegit
+  system $ "git push github master" -}
+  return () 
+
 
 
 updateHtml :: BuildConfiguration -> IO () 

@@ -1,7 +1,18 @@
 Name:		devadmin
-Version:	0.3.2
-Synopsis:       dev-admin
-Description: 	dev-admin
+Version:	0.3.3
+Synopsis:       The devadmin package 
+Description: 	
+  .
+  Full Orchestration of development environment. This package provides 
+  executables ('build', 'html', 'devconfig'). 
+  .
+  'build' has several options: 'install', 'installseg', 'push', 'haddock', 'depshow', 
+  'directdepshow', 'pull', 'hoogle', 'whatsnew', 'bootstrap', 'haddockboot' and 
+  'bridge'. You can use as 
+  . 
+  > build install pkgname
+  .  
+
 License: 	BSD3
 License-file:	LICENSE
 Author:		Ian-Woo Kim
