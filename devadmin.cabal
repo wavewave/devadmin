@@ -1,5 +1,5 @@
 Name:		devadmin
-Version:	0.3.4.1
+Version:	0.3.4.999
 Synopsis:       The devadmin package 
 Description: 	
   .
@@ -26,7 +26,7 @@ Library
   hs-source-dirs: lib
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, Cabal, containers, fgl, time, HStringTemplateHelpersIW, HStringTemplate, parsec > 3, configparser, cmdargs
+  Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, Cabal, containers, fgl, time, HStringTemplateHelpersIW, HStringTemplate, parsec > 3, configparser, cmdargs, HEPUtil>0.1.2
   Other-Modules:   
                    Paths_devadmin 
   exposed-modules: Application.DevAdmin.Cabal, 
@@ -37,7 +37,9 @@ Library
                    Application.DevAdmin.StatusControl, 
                    Application.DevAdmin.VersionCheck, 
                    Application.DevAdmin.ProgType, 
-                   Application.DevAdmin.Command
+                   Application.DevAdmin.Command, 
+                   Application.DevAdmin.Lookup.ProgType, 
+                   Application.DevAdmin.Lookup.Command
 
 Executable build 
   Main-is: build.hs
@@ -63,7 +65,13 @@ Executable devconfig
   ghc-prof-options: -caf-all -auto-all
   Build-Depends: base>4, mtl>2, cmdargs, devadmin >= 0.2.999
 
-
+Executable lookup
+  Main-is: lookup.hs
+  hs-source-dirs: exe
+  ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
+  ghc-prof-options: -caf-all -auto-all
+  Build-Depends: base>4, filepath>1, devadmin >= 0.2.999,
+                 parsec > 3, cmdargs
 		 
 
 

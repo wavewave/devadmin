@@ -12,7 +12,8 @@ data BuildConfiguration = BuildConfiguration {
   bc_docbase :: FilePath, 
   bc_hoogleDatabase :: FilePath, 
   bc_bridgebase :: FilePath, 
-  bc_gitbase :: FilePath
+  bc_gitbase :: FilePath, 
+  bc_emacsserver :: String
 } deriving (Show)
 
 
@@ -26,3 +27,4 @@ configBuild = do
                        <*> (oneFieldInput "hoogle")
                        <*> (oneFieldInput "bridge")
                        <*> (oneFieldInput "git")
+                       <*> (oneFieldInput "emacsserver")
