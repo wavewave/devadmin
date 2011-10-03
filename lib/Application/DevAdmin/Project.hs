@@ -50,6 +50,9 @@ partproj = [ ProgProj "LHCOAnalysis"
            , ProgProj "jobtester"
            , ProgProj "mathematica-data" 
 --           , ProgProj "clusteregg" 
+           , ProgProj "model-type"
+           , ProgProj "model-server"
+           , ProgProj "model-client"
            ] 
 
 bridgedproj = [ ProgProj "HEPMonteCarlo"
@@ -84,6 +87,9 @@ bridgedproj = [ ProgProj "HEPMonteCarlo"
               , ProgProj "xournal-parser"
               , ProgProj "enumerator-util"
               , ProgProj "xournal-render"
+              , ProgProj "model-type"
+              , ProgProj "model-server"
+              , ProgProj "model-client"
               ]
 
 
@@ -146,6 +152,10 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "jobtester"
            , ProgProj "mathematica-data"
 --           , ProgProj "clusteregg" 
+           , ProgProj "model-type"
+           , ProgProj "model-server"
+           , ProgProj "model-client"
+
            ] 
 
 --projects = [ ProgProj "dev-admin" ] 
