@@ -158,6 +158,7 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "model-server"
            , ProgProj "model-client"
            , ProgProj "feynrules-auto"
+           , ProgProj "lifemanager"
            ] 
 
 --projects = [ ProgProj "dev-admin" ] 
