@@ -80,6 +80,7 @@ bridgedproj = [ ProgProj "HEPMonteCarlo"
               , ProgProj "LHEParser"
               , ProgProj "pipeline"
               , ProgProj "MSSMType"
+              , ProgProj "MSSMScan"
               , ProgProj "scaffold"
               , ProgProj "configparser"
               , ProgProj "simann"
@@ -94,25 +95,9 @@ bridgedproj = [ ProgProj "HEPMonteCarlo"
               , ProgProj "model-client"
               , ProgProj "feynrules-auto"
               , ProgProj "HsStdHep"
+              , ProgProj "hxournal"
               ]
 
-
-{-
-partproj = [ ProgProj "jobqueue-common"
-           , ProgProj "jobqueue-client"
-           , ProgProj "jobqueue-server"
-           , ProgProj "jobqueue-sender"
-           , ProgProj "configparser"
-           , ProgProj "pipeline"
-           , ProgProj "madgraph-auto"
-           , ProgProj "madgraph-auto-model"
-           , ProgProj "LHE-sanitizer"
-           , ProgProj "LHCOAnalysis"
-           , ProgProj "LHCOAnalysis-type"
-           , ProgProj "iteratee-util"
-           , ProgProj "hmatrixIW"
-           ] 
--}
 
 
 projects :: [Project]
@@ -162,6 +147,8 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "feynrules-auto"
            , ProgProj "lifemanager"
            , ProgProj "HsStdHep"
+           , ProgProj "lifemanager-type"
+           , ProgProj "hxournal"
            ] 
 
 --projects = [ ProgProj "dev-admin" ] 
