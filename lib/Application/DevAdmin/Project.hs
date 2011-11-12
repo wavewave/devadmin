@@ -55,6 +55,9 @@ partproj = [ ProgProj "LHCOAnalysis"
            , ProgProj "model-client"
            , ProgProj "feynrules-auto"
            , ProgProj "HsStdHep"
+           , ProgProj "hneon"
+           , ProgProj "HFastJet"
+           , ProgProj "fficxx"
            ] 
 
 bridgedproj = [ ProgProj "HEPMonteCarlo"
@@ -96,6 +99,9 @@ bridgedproj = [ ProgProj "HEPMonteCarlo"
               , ProgProj "feynrules-auto"
               , ProgProj "HsStdHep"
               , ProgProj "hxournal"
+              , ProgProj "hneon"
+              , ProgProj "HFastJet"
+              , ProgProj "fficxx"
               ]
 
 
@@ -149,6 +155,9 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "HsStdHep"
            , ProgProj "lifemanager-type"
            , ProgProj "hxournal"
+           , ProgProj "hneon"
+           , ProgProj "HFastJet"
+           , ProgProj "fficxx"
            ] 
 
 --projects = [ ProgProj "dev-admin" ] 
