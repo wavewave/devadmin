@@ -59,6 +59,7 @@ partproj = [ ProgProj "LHCOAnalysis"
            , ProgProj "HFastJet"
            , ProgProj "HFastJet-generate"
            , ProgProj "fficxx"
+           , ProgProj "docmanager"
            ] 
 
 bridgedproj = [ ProgProj "HEPMonteCarlo"
@@ -104,6 +105,7 @@ bridgedproj = [ ProgProj "HEPMonteCarlo"
               , ProgProj "HFastJet"
               , ProgProj "HFastJet-generate"
               , ProgProj "fficxx"
+              , ProgProj "docmanager"
               ]
 
 
@@ -161,6 +163,7 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "HFastJet"
            , ProgProj "HFastJet-generate"
            , ProgProj "fficxx"
+           , ProgProj "docmanager"
            ] 
 
 --projects = [ ProgProj "dev-admin" ] 
