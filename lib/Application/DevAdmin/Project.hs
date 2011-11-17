@@ -57,6 +57,7 @@ partproj = [ ProgProj "LHCOAnalysis"
            , ProgProj "HsStdHep"
            , ProgProj "hneon"
            , ProgProj "HFastJet"
+           , ProgProj "HFastJet-generate"
            , ProgProj "fficxx"
            ] 
 
@@ -101,6 +102,7 @@ bridgedproj = [ ProgProj "HEPMonteCarlo"
               , ProgProj "hxournal"
               , ProgProj "hneon"
               , ProgProj "HFastJet"
+              , ProgProj "HFastJet-generate"
               , ProgProj "fficxx"
               ]
 
@@ -157,6 +159,7 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "hxournal"
            , ProgProj "hneon"
            , ProgProj "HFastJet"
+           , ProgProj "HFastJet-generate"
            , ProgProj "fficxx"
            ] 
 
