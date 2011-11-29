@@ -6,13 +6,15 @@ import System.Console.CmdArgs
 
 data Refactor = RefactorTest { pkgPath :: String 
                              , pkgName :: String }
-                   {- Refactor { config :: FilePath 
-                         , pkgname :: String 
-                         , modulename :: String }  -}
-                deriving (Show,Data,Typeable)
+              | ParseTest { statement :: String } 
+              deriving (Show,Data,Typeable)
         
 test = RefactorTest { pkgPath = "" &= typ "PKGPATH" &= argPos 0 
-                    , pkgName = "" &= typ "PKGNAME" &= argPos 1 } 
+                    , pkgName = "" &= typ "PKGNAME" &= argPos 1 
+                    } 
+parsetest = ParseTest { statement = "" &= typ "STMT" &= argPos 0
+                      }
+
 
 mode :: Refactor 
-mode = modes [test]
+mode = modes [test, parsetest]

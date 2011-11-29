@@ -24,13 +24,13 @@ startJobTest param = do
       srcdir = head (hsSourceDirs lbi)
   putStrLn $ show lbi 
   let filenames = map ((<.>"hs") . toFilePath) (exposedModules lib)
-      g (Left str) = str 
-      g (Right il) = importLine2String il 
+      --g (Left str) = str 
+      --g (Right il) = importLine2String il 
   forM_ filenames $ \n -> do 
     putStrLn (pkgPath param </> srcdir </> n) 
     ils <- findImportLines (pkgPath param </> srcdir </> n)
-    -- print ils 
-    putStrLn $ unlines (map g ils)
+    mapM_ (\x -> case x of Right v -> print v ; Left e -> return () ) ils 
+    -- putStrLn $ unlines (map g ils)
   let modlst = getModules gdesc
   mapM_ putStrLn modlst
 
@@ -44,3 +44,10 @@ findImportLines fp = do
                 Right Nothing -> Left str
                 Right (Just v) -> Right v 
   return (map f ls)
+
+
+startParseTest :: String -> IO ()
+startParseTest str = do 
+  case parse maybeImportLine "" str of 
+    Left err -> error (show err)
+    Right v -> print v
