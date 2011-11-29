@@ -26,7 +26,9 @@ Library
   hs-source-dirs: lib
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, Cabal, containers, fgl, time, HStringTemplateHelpersIW, HStringTemplate, parsec > 3, configparser, cmdargs, HEPUtil>0.1.2
+  Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, Cabal, containers, fgl, time, 
+                 HStringTemplateHelpersIW, HStringTemplate, parsec > 3, configparser, cmdargs, HEPUtil>0.1.2, 
+                 strict>0.3
   Other-Modules:   
                    Paths_devadmin 
   exposed-modules: Application.DevAdmin.Cabal 

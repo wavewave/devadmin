@@ -6,6 +6,8 @@ import Text.Parsec
 import Control.Monad.Identity
 import Control.Applicative ((<$>),(*>),(<*),(<*>))
 
+import Data.List (intercalate)
+
 data ImportSpec = Import [String] | Hiding [String] | NoSpec
                 deriving Show
 
@@ -21,7 +23,23 @@ data ImportLine = ImportLine { modName :: String
                 deriving Show 
 
 nameLexer :: ParsecT String () Identity String 
-nameLexer = many1 (oneOf (['0'..'9'] ++ ['A'..'Z'] ++ ['a'..'z'] ++ ['.']))
+nameLexer = many1 (oneOf (['0'..'9'] ++ ['A'..'Z'] ++ ['a'..'z'] ++ ['.','_']))
+
+nameLexerWithParenSpaces :: ParsecT String () Identity String 
+nameLexerWithParenSpaces = do  
+    let nonparen = many (noneOf ",(){}")
+                     -- (oneOf (['0'..'9'] ++ ['A'..'Z'] ++ ['a'..'z'] ++ ['.','_',' ','*','<','>',':','=']))
+        paren = do char '(' 
+                   str <- nonparen 
+                   char ')' 
+                   return $ ('(':str)++")"
+    (try paren 
+     <|> (do s1 <- nonparen 
+             s2 <- (try paren
+                    <|> return "")  
+             return (s1 ++ s2)))
+       
+
 
 importLine :: ParsecT String () Identity ImportLine 
 importLine = do spaces 
@@ -48,7 +66,7 @@ impSpec = try (string "hiding" *> skipMany1 space *> (Hiding <$> tupleP))
 
 tupleP :: ParsecT String () Identity [String] 
 tupleP = do char '(' 
-            t <- sepBy (spaces *> nameLexer <* spaces) (char ',')
+            t <- sepBy nameLexerWithParenSpaces (char ',')
             char ')'  
             return t 
 
@@ -58,3 +76,14 @@ maybeImportLine = (try (Just <$> importLine))
                   <|> 
                   return Nothing 
 
+
+importLine2String :: ImportLine -> String 
+importLine2String ImportLine{..} = 
+    case qualName of 
+      NoQual -> "import " ++ modName ++ specstr
+      WeakQual qname -> "import " ++ modName ++ " as " ++ qname ++ specstr
+      StrongQual qname -> "import qualified " ++ modName ++ " as " ++ qname ++ specstr 
+  where specstr = case importSpec of 
+                    NoSpec -> "" 
+                    Import xs -> " (" ++ intercalate "," xs ++ ")"
+                    Hiding xs -> " hiding (" ++ intercalate "," xs ++ ")"

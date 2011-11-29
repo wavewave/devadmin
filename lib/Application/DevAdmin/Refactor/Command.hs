@@ -12,5 +12,7 @@ commandLineProcess param@(RefactorTest _ _) = do
 commandLineProcess (ParseTest str) = do 
   putStrLn "parse test"
   startParseTest str
-
+commandLineProcess (RenameModule ppath pname morigname mnewname) = do 
+  putStrLn "rename module"
+  startRenameModule ppath pname morigname mnewname 
 
