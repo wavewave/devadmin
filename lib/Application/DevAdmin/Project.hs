@@ -60,6 +60,9 @@ partproj = [ ProgProj "LHCOAnalysis"
            , ProgProj "HFastJet-generate"
            , ProgProj "fficxx"
            , ProgProj "docmanager"
+           , ProgProj "diagdrawer"
+--           , ProgProj "xournalIW"
+           , ProgProj "xournal-convert"
            ] 
 
 bridgedproj = [ ProgProj "HEPMonteCarlo"
@@ -106,6 +109,9 @@ bridgedproj = [ ProgProj "HEPMonteCarlo"
               , ProgProj "HFastJet-generate"
               , ProgProj "fficxx"
               , ProgProj "docmanager"
+              , ProgProj "diagdrawer"
+              , ProgProj "xournalIW"
+              , ProgProj "xournal-convert"
               ]
 
 
@@ -164,6 +170,9 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "HFastJet-generate"
            , ProgProj "fficxx"
            , ProgProj "docmanager"
+           , ProgProj "diagdrawer"
+--           , ProgProj "xournalIW"
+           , ProgProj "xournal-convert"
            ] 
 
 --projects = [ ProgProj "dev-admin" ] 

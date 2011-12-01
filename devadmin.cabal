@@ -1,5 +1,5 @@
 Name:		devadmin
-Version:	0.3.5.9
+Version:	0.3.5.999
 Synopsis:       The devadmin package 
 Description: 	
   .
@@ -26,20 +26,26 @@ Library
   hs-source-dirs: lib
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, Cabal, containers, fgl, time, HStringTemplateHelpersIW, HStringTemplate, parsec > 3, configparser, cmdargs, HEPUtil>0.1.2
+  Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, Cabal, containers, fgl, time, 
+                 HStringTemplateHelpersIW, HStringTemplate, parsec > 3, configparser, cmdargs, HEPUtil>0.1.2, 
+                 strict>0.3
   Other-Modules:   
                    Paths_devadmin 
-  exposed-modules: Application.DevAdmin.Cabal, 
-                   Application.DevAdmin.Config, 
-                   Application.DevAdmin.Graph, 
-                   Application.DevAdmin.Job, 
-                   Application.DevAdmin.Project, 
-                   Application.DevAdmin.StatusControl, 
-                   Application.DevAdmin.VersionCheck, 
-                   Application.DevAdmin.ProgType, 
-                   Application.DevAdmin.Command, 
-                   Application.DevAdmin.Lookup.ProgType, 
+  exposed-modules: Application.DevAdmin.Cabal 
+                   Application.DevAdmin.Config 
+                   Application.DevAdmin.Graph 
+                   Application.DevAdmin.Job
+                   Application.DevAdmin.Project
+                   Application.DevAdmin.StatusControl 
+                   Application.DevAdmin.VersionCheck 
+                   Application.DevAdmin.ProgType
+                   Application.DevAdmin.Command
+                   Application.DevAdmin.Lookup.ProgType 
                    Application.DevAdmin.Lookup.Command
+                   Application.DevAdmin.Refactor.ProgType
+                   Application.DevAdmin.Refactor.Command
+                   Application.DevAdmin.Refactor.Job
+                   Application.DevAdmin.Refactor.Parse.Import 
 
 Executable build 
   Main-is: build.hs
@@ -67,6 +73,14 @@ Executable devconfig
 
 Executable lookup
   Main-is: lookup.hs
+  hs-source-dirs: exe
+  ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
+  ghc-prof-options: -caf-all -auto-all
+  Build-Depends: base>4, filepath>1, devadmin >= 0.2.999,
+                 parsec > 3, cmdargs
+
+Executable refactor
+  Main-is: refactor.hs
   hs-source-dirs: exe
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all

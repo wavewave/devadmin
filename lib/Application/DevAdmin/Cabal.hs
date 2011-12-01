@@ -7,6 +7,7 @@ import Application.DevAdmin.Project
 
 import Distribution.Package
 import Distribution.PackageDescription
+import Distribution.ModuleName 
 
 getPkgName :: GenericPackageDescription -> String 
 getPkgName = name . pkgName . package . packageDescription
@@ -25,3 +26,10 @@ getCabalFileName (_prog,workspace) (WorkspaceProj wname pname)
 
 matchDependentPackageName :: Dependency -> String 
 matchDependentPackageName (Dependency (PackageName x)  _) = x
+
+getModules :: GenericPackageDescription -> [FilePath]
+getModules dsc = 
+  let maybelib = library . packageDescription $ dsc 
+  in case maybelib of 
+       Nothing -> [] 
+       Just lib -> map ((<.>"hs") . toFilePath) (exposedModules lib) 
