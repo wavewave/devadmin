@@ -63,6 +63,7 @@ partproj = [ ProgProj "LHCOAnalysis"
            , ProgProj "diagdrawer"
 --           , ProgProj "xournalIW"
            , ProgProj "xournal-convert"
+           , ProgProj "hPGS"
            ] 
 
 bridgedproj = [ ProgProj "HEPMonteCarlo"
@@ -112,6 +113,7 @@ bridgedproj = [ ProgProj "HEPMonteCarlo"
               , ProgProj "diagdrawer"
               , ProgProj "xournalIW"
               , ProgProj "xournal-convert"
+              , ProgProj "hPGS"
               ]
 
 
@@ -173,6 +175,7 @@ projects = [ ProgProj "LHCOAnalysis"
            , ProgProj "diagdrawer"
 --           , ProgProj "xournalIW"
            , ProgProj "xournal-convert"
+           , ProgProj "hPGS"
            ] 
 
 --projects = [ ProgProj "dev-admin" ] 
