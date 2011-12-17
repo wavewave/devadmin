@@ -98,6 +98,7 @@ bridgeJob bc name = do
   setCurrentDirectory (bc_bridgebase bc) 
   system $ "darcs-fastconvert sync " ++ (name ++ "_bridge") ++ " git"
   setCurrentDirectory gitdir
+  system $ "git checkout master"
   system $ "git pull " ++ bridgegit
   system $ "git push github master" 
   return () 

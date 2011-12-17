@@ -64,6 +64,8 @@ partproj = [ ProgProj "LHCOAnalysis"
 --           , ProgProj "xournalIW"
            , ProgProj "xournal-convert"
            , ProgProj "hPGS"
+           , ProgProj "xournal-types"
+           , ProgProj "xournal-builder"
            ] 
 
 bridgedproj = [ ProgProj "HEPMonteCarlo"
@@ -114,6 +116,8 @@ bridgedproj = [ ProgProj "HEPMonteCarlo"
               , ProgProj "xournalIW"
               , ProgProj "xournal-convert"
               , ProgProj "hPGS"
+              , ProgProj "xournal-types"
+              , ProgProj "xournal-builder"
               ]
 
 
@@ -176,6 +180,8 @@ projects = [ ProgProj "LHCOAnalysis"
 --           , ProgProj "xournalIW"
            , ProgProj "xournal-convert"
            , ProgProj "hPGS"
+           , ProgProj "xournal-types"
+           , ProgProj "xournal-builder"
            ] 
 
 --projects = [ ProgProj "dev-admin" ] 
