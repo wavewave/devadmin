@@ -1,6 +1,5 @@
 module Main where
 
-import Text.Parsec
 import Application.DevAdmin.Refactor.ProgType
 import Application.DevAdmin.Config
 import Application.DevAdmin.Refactor.Command

@@ -45,14 +45,14 @@ getFileName srcdir x = do
 
 -- | finding import lines and parse it
 
-findImportLines :: FilePath -> IO [Either String ImportLine]
+findImportLines :: FilePath -> IO [Either String (String,ImportLine)]
 findImportLines fp = do 
   str <- Strict.readFile fp 
   let ls = lines str 
       f str = case parse maybeImportLine "" str of 
                 Left err -> error (show err)
                 Right Nothing -> Left str
-                Right (Just v) -> Right v 
+                Right (Just v) -> Right (str,v) 
   return (map f ls)
 
 
@@ -68,7 +68,7 @@ startJobTest param = do
   putStrLn $ show lbi 
   filenames <- mapM (getFileName srcdir) (exposedModules lib)
   let g (Left str) = str 
-      g (Right il) = importLine2String il 
+      g (Right (str,il)) = importLine2String il 
   forM_ filenames $ \n -> do 
     putStrLn (pkgPath param </> srcdir </> n) 
     ils <- findImportLines (pkgPath param </> srcdir </> n)
@@ -105,12 +105,12 @@ startRenameModule pkgpath pkgname modorig modnew = do
     writeFile srcpath (replaceModuleNameInImport modorig modnew ils)
    
 
-replaceModuleNameInImport :: String -> String -> [Either String ImportLine] -> String 
+replaceModuleNameInImport :: String -> String -> [Either String (String,ImportLine)] -> String 
 replaceModuleNameInImport modorig modnew = unlines . (map worker)   
   where worker (Left str) = str 
-        worker (Right il) = if modName il == modorig
-                              then importLine2String (il {modName = modnew})
-                              else importLine2String il
+        worker (Right (str,il)) = if modName il == modorig
+                                    then importLine2String (il {modName = modnew})
+                                    else str -- importLine2String il
 
 {-        
   let g (Left str) = return () 

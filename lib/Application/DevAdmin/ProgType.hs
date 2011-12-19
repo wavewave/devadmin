@@ -69,16 +69,22 @@ data Build = Install     { config :: FilePath
                          , pkgname :: String } 
            | DirectDepShow     { config :: FilePath
                                , pkgname :: String } 
+           | ShowAllOrdered { config :: FilePath }
            | Pull        { config :: FilePath }
            | Hoogle      { config :: FilePath 
                          , pkgname :: String }
-           | HoogleAll   { config :: FilePath } 
+           | HoogleAll   { config :: FilePath 
+                         , mpkgname :: Maybe String 
+                         } 
            | Whatsnew    { config :: FilePath } 
-           | Bootstrap   { config :: FilePath } 
-           | HaddockBoot { config :: FilePath }
+           | Bootstrap   { config :: FilePath 
+                         , mpkgname :: Maybe String } 
+           | HaddockBoot { config :: FilePath 
+                         , mpkgname :: Maybe String }
            | Bridge      { config :: FilePath 
                          , pkgname :: String }
-           | BridgeAll   { config :: FilePath } 
+           | BridgeAll   { config :: FilePath 
+                         , mpkgname :: Maybe String } 
            | CreateBridge { config :: FilePath 
                           , pkgname :: String } 
              deriving (Show,Data,Typeable)
@@ -98,22 +104,31 @@ constructBuildModes = do
       depshow = DepShow { config = dotbuild 
                         , pkgname = "" &= typ "PKGNAME" &= argPos 0 } 
       directdepshow = DirectDepShow { config = dotbuild 
-                                    , pkgname = "" &= typ "PKGNAME" &= argPos 0 } 
+                                    , pkgname = "" &= typ "PKGNAME" &= argPos 0 }
+      showallordered = ShowAllOrdered { config = dotbuild } 
       pull    = Pull    { config = dotbuild }
       hoogle  = Hoogle  { config = dotbuild 
                         , pkgname = "" &= typ "PKGNAME" &= argPos 0 }
-      hoogleall  = HoogleAll  { config = dotbuild }
-       
+      hoogleall  = HoogleAll  { config = dotbuild 
+                              , mpkgname = def &= typ "RESUMEPKG" &= args
+                              }
       whatsnew = Whatsnew { config = dotbuild } 
-      bootstrap = Bootstrap { config = dotbuild } 
-      haddockboot = HaddockBoot { config = dotbuild } 
+      bootstrap = Bootstrap { config = dotbuild 
+                            , mpkgname = def &= typ "RESUMEPKG" &= args
+                            } 
+      haddockboot = HaddockBoot { config = dotbuild 
+                                , mpkgname = def &= typ "RESUMEPKG" &= args
+                                } 
       bridge = Bridge { config = dotbuild 
                       , pkgname = "" &= typ "PKGNAME" &= argPos 0 }
-      bridgeall = BridgeAll { config = dotbuild } 
+      bridgeall = BridgeAll { config = dotbuild 
+                            , mpkgname = def &= typ "RESUMEPKG" &= args
+                            } 
       createbridge = CreateBridge { config = dotbuild 
                                   , pkgname = "" &= typ "PKGNAME" &= argPos 0 }
 
       mode = modes [ install, installseg, push, haddock, directdepshow
+                   , showallordered
                    , depshow, pull, hoogle, hoogleall, whatsnew, bootstrap
                    , haddockboot, bridge, bridgeall, createbridge ] 
               

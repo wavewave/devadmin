@@ -1,5 +1,5 @@
 Name:		devadmin
-Version:	0.3.5.999
+Version:	0.3.999
 Synopsis:       The devadmin package 
 Description: 	
   .
@@ -26,9 +26,19 @@ Library
   hs-source-dirs: lib
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, Cabal, containers, fgl, time, 
-                 HStringTemplateHelpersIW, HStringTemplate, parsec > 3, configparser, cmdargs, HEPUtil>0.1.2, 
-                 strict>0.3
+  Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, 
+                 Cabal, containers, fgl, time, 
+                 HStringTemplateHelpersIW, 
+                 HStringTemplate, 
+                 parsec > 3 && < 4, 
+                 configurator == 0.2.*, 
+                 cmdargs == 0.9.*,
+                 split == 0.1.*, 
+                 strict == 0.3.*, 
+                 text == 0.11.*
+
+                 -- HEPUtil>0.1.2,
+                 -- configparser, 
   Other-Modules:   
                    Paths_devadmin 
   exposed-modules: Application.DevAdmin.Cabal 
@@ -52,40 +62,42 @@ Executable build
   hs-source-dirs: exe
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, filepath>1, devadmin >= 0.2.999,
-                 parsec > 3, cmdargs
+  Build-Depends: base>4, filepath>1, 
+                 devadmin, configurator, text,
+                 cmdargs == 0.9.*
 		 
 Executable html 
   Main-is: html.hs
   hs-source-dirs: exe
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, 
-                 Cabal, containers, fgl, time,
-                 parsec > 3, devadmin >= 0.2.999
+  Build-Depends: base>4, mtl>2, filepath > 1, devadmin 
+                 --  unix > 2, directory, process, 
+                 --  Cabal, containers, fgl, time,
+                 -- parsec > 3, devadmin >= 0.2.999
 		 
 Executable devconfig 
   Main-is: devconfig.hs
   hs-source-dirs: exe
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, mtl>2, cmdargs, devadmin >= 0.2.999
+  Build-Depends: base>4, mtl>2, cmdargs == 0.9.*, devadmin
 
 Executable lookup
   Main-is: lookup.hs
   hs-source-dirs: exe
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, filepath>1, devadmin >= 0.2.999,
-                 parsec > 3, cmdargs
+  Build-Depends: base>4, filepath>1, devadmin,
+                 cmdargs == 0.9.*
 
 Executable refactor
   Main-is: refactor.hs
   hs-source-dirs: exe
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, filepath>1, devadmin >= 0.2.999,
-                 parsec > 3, cmdargs
+  Build-Depends: base>4, filepath>1, devadmin,
+                 cmdargs==0.9.*
 		 
 
 

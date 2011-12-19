@@ -12,13 +12,24 @@ import System.Directory
 import System.FilePath
 import System.Process
 
-import HEP.Util.File 
+-- import HEP.Util.File 
 
 import Distribution.Verbosity
 import Distribution.PackageDescription
 import Distribution.PackageDescription.Parse
 
 import Application.DevAdmin.Cabal
+
+import Data.List 
+import Data.List.Split
+
+moduleDirFile :: String -> (String,String)
+moduleDirFile mname = 
+  let splitted = splitOn "." mname
+      moddir  = intercalate "/" (init splitted )
+      modfile = (last splitted) ++ ".hs" 
+  in  (moddir, modfile)
+
 
 commandLineProcess :: BuildConfiguration -> Lookup -> IO () 
 commandLineProcess bc lparam = do 
