@@ -110,7 +110,6 @@ makeProjDepOrderList :: BuildConfiguration
                      -> ProjectConfiguration
                      -> IO (DaughterMap,[String])
 makeProjDepOrderList bc pc = do 
-  putStrLn $ show bc
   let projects = pc_projects pc 
   let idnamemap = idprojmap projects
       nameidmap = projidmap projects 

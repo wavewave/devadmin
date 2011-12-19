@@ -20,7 +20,7 @@ commandLineProcess bc pc bparam = do
     Install {..}     -> do plst <- makeProjDepList bc pc [ProgProj pkgname] 
                            flip mapM_ plst   (cabalInstallJob bc)
     InstallSeg {..}  -> do plst <- makeProjDepList bc pc (map ProgProj [pkgnamemother]) 
-                           putStrLn $ show plst 
+                           -- putStrLn $ show plst 
                            mmap <- (constructMotherMap bc pc)
                            let rallmothers = findAllMothers mmap pkgnamedest
                            case rallmothers of 
