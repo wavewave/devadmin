@@ -34,6 +34,7 @@ commandLineProcess bc pc bparam = do
                            flip mapM_ plst   (haddockJob bc)
     DepShow {..}     -> do plst <- makeProjDepList bc pc [ProgProj pkgname]
                            flip mapM_ plst   (depshowJob bc)
+    ShowAllOrdered {..} -> do print alllst 
     DirectDepShow {..} -> do lst <- makeProjDirectDepList bc pc (ProgProj pkgname)
                              putStrLn $ show lst 
     Pull {..}        ->    flip mapM_ alllst (darcsPullJob bc)
