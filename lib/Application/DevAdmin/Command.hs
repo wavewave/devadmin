@@ -38,11 +38,26 @@ commandLineProcess bc pc bparam = do
                              putStrLn $ show lst 
     Pull {..}        ->    flip mapM_ alllst (darcsPullJob bc)
     Hoogle {..}      ->    hoogleJob bc pkgname
-    HoogleAll {..}   ->    flip mapM_ alllst (hoogleJob bc)
+    HoogleAll {..}   -> do 
+      let alllst' = case mpkgname of 
+                      Nothing -> alllst
+                      Just apkg -> filterBefore apkg alllst 
+      flip mapM_ alllst' (hoogleJob bc)
     Whatsnew {..}    ->    flip mapM_ alllst (darcsWhatsnewJob bc)
-    Bootstrap {..}   ->    flip mapM_ alllst (cabalInstallJob bc)
-    HaddockBoot {..} ->    flip mapM_ alllst (haddockJob bc)
+    Bootstrap {..}   -> do    
+      let alllst' = case mpkgname of 
+                      Nothing -> alllst
+                      Just apkg -> filterBefore apkg alllst 
+      flip mapM_ alllst' (cabalInstallJob bc)
+    HaddockBoot {..} -> do 
+      let alllst' = case mpkgname of 
+                      Nothing -> alllst
+                      Just apkg -> filterBefore apkg alllst 
+      flip mapM_ alllst' (haddockJob bc)
     Bridge {..} -> bridgeJob bc pkgname
     BridgeAll {..}      -> mapM_ (bridgeJob bc) 
                                  (map projname (pc_bridgeprojects pc))
     CreateBridge {..} ->  createBridgeJob bc pkgname
+
+
+filterBefore name list = dropWhile (/= name) list  
