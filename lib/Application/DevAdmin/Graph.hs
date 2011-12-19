@@ -20,14 +20,19 @@ import Distribution.PackageDescription.Parse
 
 type DaughterMap = M.Map String [String]
 
-idproj :: [(Int,String)]
-idproj = zip [1..] . map projname $ projects
+type IDNameMap = M.Map Int String 
+type NameIDMap = M.Map String Int
 
-idprojmap :: M.Map Int String 
-idprojmap = M.fromList idproj
+type IDNameAssocList = [(Int,String)]
 
-projidmap :: M.Map String Int 
-projidmap = M.fromList $ map swap idproj
+idproj :: [Project] -> IDNameAssocList
+idproj = zip [1..] . map projname 
+
+idprojmap :: [Project] -> IDNameMap
+idprojmap = M.fromList . idproj
+
+projidmap :: [Project] -> NameIDMap
+projidmap = M.fromList . map swap . idproj
   where swap (x,y) = (y,x)
 
 nameMatch :: [Project] -> String -> Bool
@@ -51,18 +56,18 @@ dotGraph :: [(String,[String])] -> String
 dotGraph lst = "digraph G { \n" ++ concatMap dotGraphEach lst ++ "\n } \n"
   
 
-mkDepEdge :: (String, [String]) -> [(Int,Int,())]
-mkDepEdge (x,ys) = 
-  let idx = fromJust . M.lookup x $ projidmap 
-  in  map (mkDepEdgeSingle idx) ys
+mkDepEdge :: NameIDMap -> (String, [String]) -> [(Int,Int,())]
+mkDepEdge projmap (x,ys) = 
+  let idx = fromJust . M.lookup x $ projmap 
+  in  map (mkDepEdgeSingle projmap idx) ys
       
-mkDepEdgeSingle :: Int -> String -> (Int,Int,())       
-mkDepEdgeSingle idx y =
-  let idy = fromJust . M.lookup y $ projidmap 
+mkDepEdgeSingle :: NameIDMap -> Int -> String -> (Int,Int,())       
+mkDepEdgeSingle projmap idx y =
+  let idy = fromJust . M.lookup y $ projmap 
   in  (idx,idy,())
 
 
-findAllDaughters :: M.Map String [String] -> String -> [String] 
+findAllDaughters :: DaughterMap -> String -> [String] 
 findAllDaughters m c = do
   case M.lookup c m of
     Just ys -> do y <- ys 
@@ -75,8 +80,10 @@ findOrder str strs = let (l,_r) = break (== str) strs
                      in  (length l,str)
 
 
-constructMotherMap ::  BuildConfiguration -> IO (M.Map String [String])
-constructMotherMap bc = do 
+constructMotherMap :: BuildConfiguration -> ProjectConfiguration 
+                   -> IO (M.Map String [String])
+constructMotherMap bc pc = do 
+  let projects = pc_projects pc
   let (p,w) = (,) <$> bc_progbase <*> bc_workspacebase $ bc
   gdescs <- mapM (readPackageDescription normal . getCabalFileName (p,w) ) projects
   let deps = map ((,) <$> getPkgName <*> getDependency) gdescs
@@ -99,36 +106,51 @@ findAllMothers m proj =
 -- findAllMothers 
 
 
-makeProjDepOrderList :: BuildConfiguration -> IO (DaughterMap,[String])
-makeProjDepOrderList bc = do 
+makeProjDepOrderList :: BuildConfiguration 
+                     -> ProjectConfiguration
+                     -> IO (DaughterMap,[String])
+makeProjDepOrderList bc pc = do 
   putStrLn $ show bc
+  let projects = pc_projects pc 
+  let idnamemap = idprojmap projects
+      nameidmap = projidmap projects 
   let (p,w) = (,) <$> bc_progbase <*> bc_workspacebase $ bc
   gdescs <- mapM (readPackageDescription normal . getCabalFileName (p,w) ) projects 
   let deps = map ((,) <$> getPkgName <*> getDependency) gdescs
       motherlist = map ((,) <$> fst  <*> (filter (nameMatch projects). snd)) deps
       daughtermap = convertMotherMapToDaughterMap motherlist 
       daughterlist = M.toList daughtermap 
-      edgelist = concatMap  mkDepEdge daughterlist
-      allnodes = idproj 
+      edgelist = concatMap  (mkDepEdge nameidmap) daughterlist
+      allnodes = idproj projects
       gr :: Gr String () 
       gr = mkGraph allnodes edgelist
       linear = topsort gr  
-      strlst = map (\x->fromJust $ M.lookup x idprojmap) linear 
+      strlst = map (\x->fromJust $ M.lookup x idnamemap) linear 
   return (daughtermap,strlst)
 
-makeProjDepList :: BuildConfiguration -> [String] -> IO [String]
-makeProjDepList bc projs = do 
-  (daughtermap,strlst) <- makeProjDepOrderList bc 
+-- | get all dependent daughter packages on a given package
+
+makeProjDepList :: BuildConfiguration -> ProjectConfiguration -> [Project] 
+                -> IO [String]
+makeProjDepList bc pc projs = do 
+  let projnames = map projname projs
+  (daughtermap,strlst) <- makeProjDepOrderList bc pc
      
-  let alldaughters = nub . concatMap (findAllDaughters daughtermap) $ projs
+  let alldaughters = nub . concatMap (findAllDaughters daughtermap) $ projnames
       numbered = map (\x -> findOrder x strlst) alldaughters 
       finallist = map snd . sortBy (compare `on` fst) $ numbered 
   return finallist
 
-makeProjDirectDepList :: BuildConfiguration -> String -> IO [String]
-makeProjDirectDepList bc proj = do 
-  (daughtermap,_) <- makeProjDepOrderList bc 
-  let r = M.lookup proj daughtermap 
+-- | get an immediate dependent daughter packages on a given package
+
+makeProjDirectDepList :: BuildConfiguration -> ProjectConfiguration -> Project 
+                      -> IO [String]
+makeProjDirectDepList bc pc proj = do 
+  (daughtermap,_) <- makeProjDepOrderList bc pc
+  let r = M.lookup (projname proj) daughtermap 
   case r of 
     Nothing -> return [] 
     Just lst -> return lst
+
+
+

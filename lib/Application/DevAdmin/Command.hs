@@ -12,15 +12,16 @@ import Data.List
 
 -- import Control.Applicative
 
-commandLineProcess :: BuildConfiguration ->  Build -> IO () 
-commandLineProcess bc bparam = do 
-  alllst <- makeProjDepList bc (map projname projects)
+commandLineProcess :: BuildConfiguration -> ProjectConfiguration -> Build -> IO () 
+commandLineProcess bc pc bparam = do 
+  let projects = pc_projects pc 
+  alllst <- makeProjDepList bc pc projects 
   case bparam of 
-    Install {..}     -> do plst <- makeProjDepList bc [pkgname]
+    Install {..}     -> do plst <- makeProjDepList bc pc [ProgProj pkgname] 
                            flip mapM_ plst   (cabalInstallJob bc)
-    InstallSeg {..}  -> do plst <- makeProjDepList bc [pkgnamemother] 
+    InstallSeg {..}  -> do plst <- makeProjDepList bc pc (map ProgProj [pkgnamemother]) 
                            putStrLn $ show plst 
-                           mmap <- (constructMotherMap bc)
+                           mmap <- (constructMotherMap bc pc)
                            let rallmothers = findAllMothers mmap pkgnamedest
                            case rallmothers of 
                              Nothing -> return () 
@@ -29,11 +30,11 @@ commandLineProcess bc bparam = do
                                (putStrLn.show) flst 
                                flip mapM_ flst (cabalInstallJob bc)
     Push    {..}     ->    flip mapM_ alllst (darcsPushJob bc)
-    Haddock {..}     -> do plst <- makeProjDepList bc [pkgname]
+    Haddock {..}     -> do plst <- makeProjDepList bc pc [ProgProj pkgname]
                            flip mapM_ plst   (haddockJob bc)
-    DepShow {..}     -> do plst <- makeProjDepList bc [pkgname]
+    DepShow {..}     -> do plst <- makeProjDepList bc pc [ProgProj pkgname]
                            flip mapM_ plst   (depshowJob bc)
-    DirectDepShow {..} -> do lst <- makeProjDirectDepList bc pkgname
+    DirectDepShow {..} -> do lst <- makeProjDirectDepList bc pc (ProgProj pkgname)
                              putStrLn $ show lst 
     Pull {..}        ->    flip mapM_ alllst (darcsPullJob bc)
     Hoogle {..}      ->    hoogleJob bc pkgname
@@ -42,5 +43,6 @@ commandLineProcess bc bparam = do
     Bootstrap {..}   ->    flip mapM_ alllst (cabalInstallJob bc)
     HaddockBoot {..} ->    flip mapM_ alllst (haddockJob bc)
     Bridge {..} -> bridgeJob bc pkgname
-    BridgeAll {..}      -> mapM_ (bridgeJob bc) (map projname bridgedproj)
+    BridgeAll {..}      -> mapM_ (bridgeJob bc) 
+                                 (map projname (pc_bridgeprojects pc))
     CreateBridge {..} ->  createBridgeJob bc pkgname

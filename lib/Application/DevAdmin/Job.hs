@@ -133,8 +133,9 @@ createBridgeJob bc name = do
 
 
 
-updateHtml :: BuildConfiguration -> IO () 
-updateHtml bc = do 
+updateHtml :: BuildConfiguration -> ProjectConfiguration -> IO () 
+updateHtml bc pc = do
+  let projects = pc_projects pc 
   tmpldir <- (</> "template") <$> getDataDir   
   templates <- directoryGroup tmpldir 
   progbodystr <- mapM (progbody bc) projects >>= return . concat

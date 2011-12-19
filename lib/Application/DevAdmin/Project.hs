@@ -1,14 +1,29 @@
+{-# LANGUAGE FlexibleInstances #-}
+
 module Application.DevAdmin.Project where
 
-data Project = WorkspaceProj { workspacename :: String, projname :: String } 
-             | ProgProj { projname :: String } 
+import Control.Monad 
+import Data.Text
+import Data.Configurator.Types 
+
+type ProjName = String 
+
+data Project = WorkspaceProj { workspacename :: String, projname :: ProjName } 
+             | ProgProj { projname :: ProjName } 
              deriving (Show,Eq,Ord) 
+
+instance Configured Project where
+  convert (String txt) = Just (ProgProj (unpack txt))
+  convert _ = Nothing 
+instance Configured [Project] where
+  convert (List vs) = mapM convert vs 
 
 -- | Part of projects that are availabe in haddock 
 --
 --   > test
 --
 
+{-
 partproj :: [Project] 
 partproj = [ ProgProj "LHCOAnalysis" 
            , ProgProj "LHCOAnalysis-type" 
@@ -186,3 +201,4 @@ projects = [ ProgProj "LHCOAnalysis"
 
 --projects = [ ProgProj "dev-admin" ] 
 
+-}

@@ -6,15 +6,18 @@ import System.Environment
 import Application.DevAdmin.Config
 import Application.DevAdmin.Job
 
+import Control.Applicative 
+
 main :: IO ()
 main = do   
   putStrLn "html"
   -- homedir <- getEnv "HOME" 
   cfg <- loadConfigFile 
   mbc <- getBuildConfiguration cfg 
-  case mbc of 
+  mpc <- getProjectConfiguration cfg 
+  case (,) <$> mbc <*> mpc of 
     Nothing -> error ".build file parse error"
-    Just bc -> updateHtml bc
+    Just (bc,pc) -> updateHtml bc pc
 
   {-
   configstr <- readFile (homedir </> ".build")

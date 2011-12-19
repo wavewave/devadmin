@@ -34,7 +34,8 @@ Library
                  configurator == 0.2.*, 
                  cmdargs == 0.9.*,
                  split == 0.1.*, 
-                 strict == 0.3.*
+                 strict == 0.3.*, 
+                 text == 0.11.*
 
                  -- HEPUtil>0.1.2,
                  -- configparser, 
@@ -62,7 +63,7 @@ Executable build
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
   Build-Depends: base>4, filepath>1, 
-                 devadmin, 
+                 devadmin, configurator, text,
                  cmdargs == 0.9.*
 		 
 Executable html 

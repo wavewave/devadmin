@@ -2,7 +2,7 @@
 
 module Application.DevAdmin.Config where
 
-import Data.Maybe 
+import Application.DevAdmin.Project
 {-
 import Text.Parsec 
 import HEP.Parser.Config
@@ -28,6 +28,12 @@ data BuildConfiguration = BuildConfiguration {
   bc_gitbase :: FilePath, 
   bc_emacsserver :: String
 } deriving (Show)
+
+data ProjectConfiguration = ProjectConfiguration { 
+  pc_projects :: [Project], 
+  pc_bridgeprojects :: [Project], 
+  pc_hoogleprojects :: Maybe [Project]
+}
 
 
 loadConfigFile :: IO Config 
@@ -56,6 +62,13 @@ getBuildConfiguration c  =
   <*> C.lookup c "build.bridge"
   <*> C.lookup c "build.git"
   <*> C.lookup c "build.emacsserver"
+
+getProjectConfiguration :: Config -> IO (Maybe ProjectConfiguration)
+getProjectConfiguration c  = 
+  liftM3 ProjectConfiguration 
+  <$> C.lookup c "projects"
+  <*> C.lookup c "bridgeproj"
+  <*> (C.lookup c "hoogleproj" >>= return . pure ) 
 
 {-
 
