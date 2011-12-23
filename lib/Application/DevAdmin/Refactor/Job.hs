@@ -58,6 +58,7 @@ findImportLines fp = do
 
 -- | for RefactorTest command
 
+{-
 startJobTest :: Refactor -> IO () 
 startJobTest param = do 
   putStrLn "startJobTest"
@@ -76,7 +77,7 @@ startJobTest param = do
     -- putStrLn $ unlines (map g ils)
   let modlst = getModules gdesc
   mapM_ putStrLn modlst
-
+-}
 
 -- | for parsetest command 
 

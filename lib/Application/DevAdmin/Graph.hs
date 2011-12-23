@@ -83,9 +83,11 @@ findOrder str strs = let (l,_r) = break (== str) strs
 constructMotherMap :: BuildConfiguration -> ProjectConfiguration 
                    -> IO (M.Map String [String])
 constructMotherMap bc pc = do 
-  let projects = pc_projects pc
+  {-  let projects = pc_projects pc
   let (p,w) = (,) <$> bc_progbase <*> bc_workspacebase $ bc
-  gdescs <- mapM (readPackageDescription normal . getCabalFileName (p,w) ) projects
+  gdescs <- mapM (readPackageDescription normal . getCabalFileName (p,w) ) projects -}
+  let projects = pc_projects pc
+  gdescs <- getAllGenPkgDesc bc pc 
   let deps = map ((,) <$> getPkgName <*> getDependency) gdescs
       mlst = map ((,) <$> fst  <*> (filter (nameMatch projects). snd)) deps
   return (M.fromList mlst)

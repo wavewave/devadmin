@@ -56,8 +56,12 @@ commandLineProcess bc pc bparam = do
                       Just apkg -> filterBefore apkg alllst 
       flip mapM_ alllst' (haddockJob bc)
     Bridge {..} -> bridgeJob bc pkgname
-    BridgeAll {..}      -> mapM_ (bridgeJob bc) 
-                                 (map projname (pc_bridgeprojects pc))
+    BridgeAll {..} -> do 
+      let balllst = map projname (pc_bridgeprojects pc)
+      let balllst' = case mpkgname of 
+                       Nothing -> balllst 
+                       Just apkg -> filterBefore apkg balllst 
+      mapM_ (bridgeJob bc) balllst'
     CreateBridge {..} ->  createBridgeJob bc pkgname
 
 
