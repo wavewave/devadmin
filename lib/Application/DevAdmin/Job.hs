@@ -27,8 +27,14 @@ cabalInstallJob bc name = do
   putStrLn $ "update : " ++  name
   system $ "ghc-pkg --force unregister " ++ name
   setCurrentDirectory ((bc_progbase bc) </> name)
-  system $ "cabal install"
-  return () 
+  excode <- system $ "cabal install"
+  case excode of 
+    ExitSuccess -> do 
+      putStrLn "successful installation"
+      putStrLn "-----------------------"
+    ExitFailure ecd -> error $ "not successful installation of " ++ name
+                               ++ " with exit code " ++ show ecd 
+  -- return () 
 
 
 darcsWhatsnewJob :: BuildConfiguration -> String -> IO () 
