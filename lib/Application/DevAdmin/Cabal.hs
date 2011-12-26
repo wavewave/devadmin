@@ -63,3 +63,4 @@ getOtherModules :: GenericPackageDescription -> [(FilePath,ModuleName)]
 getOtherModules dsc = 
   let mnode = condLibrary dsc 
   in maybe [] ((map <$> (,) . head . hsSourceDirs . libBuildInfo <*> otherModules . libBuildInfo) . condTreeData) mnode
+
