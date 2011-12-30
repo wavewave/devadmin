@@ -3,11 +3,6 @@
 module Application.DevAdmin.Config where
 
 import Application.DevAdmin.Project
-{-
-import Text.Parsec 
-import HEP.Parser.Config
-import Control.Monad.Identity
--}
 
 import Control.Applicative
 
@@ -34,6 +29,15 @@ data ProjectConfiguration = ProjectConfiguration {
   pc_bridgeprojects :: [Project], 
   pc_hoogleprojects :: Maybe [Project]
 }
+
+withBuildFile :: ((BuildConfiguration,ProjectConfiguration) -> IO ()) -> IO ()
+withBuildFile action = do 
+  cfg <- loadConfigFile
+  mbc <- getBuildConfiguration cfg
+  mpc <- getProjectConfiguration cfg  
+  case (,) <$> mbc <*> mpc of 
+    Nothing -> error ".build file parse error"
+    Just (bc,pc) -> action (bc,pc)
 
 
 loadConfigFile :: IO Config 
@@ -70,17 +74,3 @@ getProjectConfiguration c  =
   <*> C.lookup c "bridgeproj"
   <*> (C.lookup c "hoogleproj" >>= return . pure ) 
 
-{-
-
-configBuild :: ParsecT String () Identity BuildConfiguration
-configBuild = do 
-  oneGroupFieldInput "build" $ 
-    BuildConfiguration <$> (oneFieldInput "progbase")
-                       <*> (oneFieldInput "workspacebase")
-                       <*> (oneFieldInput "linkbase")
-                       <*> (oneFieldInput "docbase")
-                       <*> (oneFieldInput "hoogle")
-                       <*> (oneFieldInput "bridge")
-                       <*> (oneFieldInput "git")
-                       <*> (oneFieldInput "emacsserver")
--}
