@@ -1,5 +1,5 @@
 Name:		devadmin
-Version:	0.4.0.999
+Version:	0.4.1
 Synopsis:       The devadmin package 
 Description: 	
   .
@@ -72,9 +72,7 @@ Executable html
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
   Build-Depends: base>4, mtl>2, filepath > 1, devadmin 
-                 --  unix > 2, directory, process, 
-                 --  Cabal, containers, fgl, time,
-                 -- parsec > 3, devadmin >= 0.2.999
+
 		 
 Executable devconfig 
   Main-is: devconfig.hs
@@ -98,6 +96,21 @@ Executable refactor
   ghc-prof-options: -caf-all -auto-all
   Build-Depends: base>4, filepath>1, devadmin,
                  cmdargs==0.9.*
+		 
+Executable showall
+  Main-is: showall.hs
+  hs-source-dirs: exe
+  ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
+  ghc-prof-options: -caf-all -auto-all
+  Build-Depends: base>4, 
+                 filepath>1, 
+                 directory,
+                 process, 
+                 time,
+                 old-locale,
+                 devadmin, 
+                 HROOT
+                 
 		 
 
 
