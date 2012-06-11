@@ -28,7 +28,7 @@ data ProjectConfiguration = ProjectConfiguration {
   pc_projects :: [Project], 
   pc_bridgeprojects :: [Project], 
   pc_hoogleprojects :: Maybe [Project]
-}
+} deriving (Show)
 
 withBuildFile :: ((BuildConfiguration,ProjectConfiguration) -> IO ()) -> IO ()
 withBuildFile action = do 

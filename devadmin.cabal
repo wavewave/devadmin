@@ -1,10 +1,10 @@
 Name:		devadmin
-Version:	0.4.1
+Version:	0.4.999
 Synopsis:       The devadmin package 
 Description: 	
   .
   Full Orchestration of development environment. This package provides 
-  executables ('build', 'html', 'devconfig'). 
+  executables ('build', 'html', 'devconfig', 'lookup', 'refactor', 'showall', 'header'). 
   .
   'build' has several options: 'install', 'installseg', 'push', 'haddock', 'depshow', 
   'directdepshow', 'pull', 'hoogle', 'whatsnew', 'bootstrap', 'haddockboot' and 
@@ -19,8 +19,9 @@ Author:		Ian-Woo Kim
 Maintainer: 	Ian-Woo Kim <ianwookim@gmail.com>
 Build-Type: 	Simple
 Cabal-Version:  >= 1.8
-data-files:     template/*.html.st
-
+data-files:      
+                template/*.html.st
+                template/*.hs.st
 
 Library
   hs-source-dirs: lib
@@ -36,9 +37,6 @@ Library
                  split == 0.1.*, 
                  strict == 0.3.*, 
                  text == 0.11.*
-
-                 -- HEPUtil>0.1.2,
-                 -- configparser, 
   Other-Modules:   
                    Paths_devadmin 
   exposed-modules: Application.DevAdmin.Cabal 
@@ -56,6 +54,9 @@ Library
                    Application.DevAdmin.Refactor.Command
                    Application.DevAdmin.Refactor.Job
                    Application.DevAdmin.Refactor.Parse.Import 
+                   Application.DevAdmin.Header.ProgType
+                   Application.DevAdmin.Header.Command
+                   Application.DevAdmin.Header.Job
 
 Executable build 
   Main-is: build.hs
@@ -97,20 +98,27 @@ Executable refactor
   Build-Depends: base>4, filepath>1, devadmin,
                  cmdargs==0.9.*
 		 
-Executable showall
-  Main-is: showall.hs
+-- Executable showall
+--   Main-is: showall.hs
+--   hs-source-dirs: exe
+--  ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
+--  ghc-prof-options: -caf-all -auto-all
+--  Build-Depends: base>4, 
+--                 filepath>1, 
+--                 directory,
+--                 process, 
+--                 time,
+--                 old-locale,
+--                 devadmin
+--                 -- , 
+--                 -- HROOT
+                 
+Executable header
+  Main-is: header.hs
   hs-source-dirs: exe
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, 
-                 filepath>1, 
-                 directory,
-                 process, 
-                 time,
-                 old-locale,
-                 devadmin, 
-                 HROOT
-                 
-		 
+  Build-Depends: base>4, filepath>1, devadmin,
+                 cmdargs==0.9.*
 
 

@@ -15,7 +15,7 @@ import Data.Time
 import Application.DevAdmin.Config
 import Application.DevAdmin.Project
 
-import HROOT
+-- import HROOT
 
 main :: IO ()
 main = do 
@@ -60,15 +60,15 @@ plot vs = do
   x0 <- convert t0 0
   t1 <- newTDatime 2010 01 01 00 00 00 
   x1 <- (-) <$> convert t1 0 <*> return x0 
-  t2 <- newTDatime 2012 01 01 00 00 00  
+  t2 <- newTDatime 2012 03 01 00 00 00  
   x2 <- (-) <$> convert t2 0 <*> return x0 
 
   putStrLn $ show x0 
   putStrLn $ show x1
   putStrLn $ show x2 
 
-  let ndays = diffDays (fromGregorian 2012 01 01) (fromGregorian 2010 01 01)
-      nbins = fromIntegral ndays -- `div` 7 
+  let ndays = diffDays (fromGregorian 2012 03 01) (fromGregorian 2010 01 01)
+      nbins = fromIntegral ndays `div` 30  -- `div` 7 
 
   h1 <- newTH1F "test" "test"  nbins (fromIntegral x1) (fromIntegral x2)
 
