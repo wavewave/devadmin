@@ -87,6 +87,8 @@ data Build = Install     { config :: FilePath
                          , mpkgname :: Maybe String } 
            | CreateBridge { config :: FilePath 
                           , pkgname :: String } 
+           | CleanAll { config :: FilePath 
+                      , mpkgname :: Maybe String } 
              deriving (Show,Data,Typeable)
 
 constructBuildModes :: IO Build 
@@ -126,11 +128,14 @@ constructBuildModes = do
                             } 
       createbridge = CreateBridge { config = dotbuild 
                                   , pkgname = "" &= typ "PKGNAME" &= argPos 0 }
+      cleanall = CleanAll { config = dotbuild 
+                          , mpkgname = def &= typ "RESUMEPKG" &= args }
+
 
       mode = modes [ install, installseg, push, haddock, directdepshow
                    , showallordered
                    , depshow, pull, hoogle, hoogleall, whatsnew, bootstrap
-                   , haddockboot, bridge, bridgeall, createbridge ] 
+                   , haddockboot, bridge, bridgeall, createbridge, cleanall] 
               
   return mode 
                         

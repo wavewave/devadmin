@@ -166,3 +166,19 @@ progbody bc (ProgProj prjname) = do
   return str 
 progbody _ _ = error "no match error in progbody"
  
+
+-- | 
+
+cabalCleanJob :: BuildConfiguration -> String -> IO () 
+cabalCleanJob bc name = do 
+  putStrLn $ "cleaning : " ++  name
+  system $ "ghc-pkg --force unregister " ++ name
+  setCurrentDirectory ((bc_progbase bc) </> name)
+  excode <- system $ "cabal clean"
+  case excode of 
+    ExitSuccess -> do 
+      putStrLn "successful clean"
+      putStrLn "-----------------------"
+    ExitFailure ecd -> error $ "not successful installation of " ++ name
+                               ++ " with exit code " ++ show ecd 
+  -- return () 

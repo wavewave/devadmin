@@ -63,6 +63,11 @@ commandLineProcess bc pc bparam = do
                        Just apkg -> filterBefore apkg balllst 
       mapM_ (bridgeJob bc) balllst'
     CreateBridge {..} ->  createBridgeJob bc pkgname
+    CleanAll {..}   -> do    
+      let alllst' = case mpkgname of 
+                      Nothing -> alllst
+                      Just apkg -> filterBefore apkg alllst 
+      flip mapM_ alllst' (cabalCleanJob bc)
 
 
 filterBefore name list = dropWhile (/= name) list  
