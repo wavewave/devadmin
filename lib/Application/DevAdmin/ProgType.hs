@@ -56,6 +56,7 @@ import System.FilePath
 --
 --     * bridge :  
 
+-- | 
 
 data Build = Install     { config :: FilePath 
                          , pkgname :: String }
@@ -89,7 +90,10 @@ data Build = Install     { config :: FilePath
                           , pkgname :: String } 
            | CleanAll { config :: FilePath 
                       , mpkgname :: Maybe String } 
+           | CloneAll { config :: FilePath }
              deriving (Show,Data,Typeable)
+
+-- | 
 
 constructBuildModes :: IO Build 
 constructBuildModes = do 
@@ -130,12 +134,13 @@ constructBuildModes = do
                                   , pkgname = "" &= typ "PKGNAME" &= argPos 0 }
       cleanall = CleanAll { config = dotbuild 
                           , mpkgname = def &= typ "RESUMEPKG" &= args }
-
-
+      cloneall = CleanAll { config = dotbuild }
       mode = modes [ install, installseg, push, haddock, directdepshow
                    , showallordered
                    , depshow, pull, hoogle, hoogleall, whatsnew, bootstrap
-                   , haddockboot, bridge, bridgeall, createbridge, cleanall] 
+                   , haddockboot, bridge, bridgeall, createbridge, cleanall
+                   , cloneall
+                   ] 
               
   return mode 
                         

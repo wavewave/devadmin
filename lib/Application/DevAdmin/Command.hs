@@ -9,7 +9,9 @@ import Application.DevAdmin.Job
 import Application.DevAdmin.ProgType
 
 import Data.List 
+import Data.Foldable
 
+import Prelude hiding (mapM_)
 -- import Control.Applicative
 
 commandLineProcess :: BuildConfiguration -> ProjectConfiguration -> Build -> IO () 
@@ -68,6 +70,7 @@ commandLineProcess bc pc bparam = do
                       Nothing -> alllst
                       Just apkg -> filterBefore apkg alllst 
       flip mapM_ alllst' (cabalCleanJob bc)
+    CloneAll {..}   -> forM_ alllst (darcsGetJob bc)
 
 
 filterBefore name list = dropWhile (/= name) list  

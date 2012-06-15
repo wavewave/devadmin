@@ -15,6 +15,8 @@ import Application.DevAdmin.Project
 import Application.DevAdmin.VersionCheck
 import Paths_devadmin
 
+-- | 
+
 depshowJob :: BuildConfiguration -> String -> IO () 
 depshowJob _bc name = do 
    putStrLn $ "currently working on " ++ name 
@@ -61,12 +63,16 @@ darcsPushJob bc name = do
   system $ "darcs push"
   return () 
 
+-- |
+
 darcsPullJob :: BuildConfiguration -> String -> IO () 
 darcsPullJob bc name = do 
   putStrLn $ "darcs pull : " ++  name
   setCurrentDirectory (bc_progbase bc </> name)
   system $ "darcs pull"
   return () 
+
+-- | 
 
 haddockJob :: BuildConfiguration -> String -> IO () 
 haddockJob bc name = do 
@@ -77,6 +83,8 @@ haddockJob bc name = do
   system $ "cabal copy"
   versioncheck bc
   return () 
+
+-- | 
 
 hoogleJob :: BuildConfiguration -> String -> IO () 
 hoogleJob bc name = do 
@@ -90,6 +98,7 @@ hoogleJob bc name = do
     else putStrLn $ "no such file : " ++ hooglefile 
   return () 
 
+-- | 
 
 bridgeJob :: BuildConfiguration -> String -> IO () 
 bridgeJob bc name = do 
@@ -182,3 +191,21 @@ cabalCleanJob bc name = do
     ExitFailure ecd -> error $ "not successful installation of " ++ name
                                ++ " with exit code " ++ show ecd 
   -- return () 
+
+-- | 
+
+darcsGetJob :: BuildConfiguration -> String -> IO () 
+darcsGetJob bc name = do 
+  putStrLn $ "darcs get : " ++ name
+  setCurrentDirectory (bc_progbase bc)
+  excode <- system $ "darcs get " ++ ((bc_darcsrepobase bc) </> name)
+  case excode of 
+    ExitSuccess -> do 
+      putStrLn "some change happened. would you proceed to the next? (Y/N)" 
+      c <- getLine
+      if (not.null $ c) &&  (head c == 'y' || head c == 'Y')
+        then return () 
+        else darcsWhatsnewJob bc name 
+    ExitFailure 1 -> return () 
+    _ -> error $ "do not know what to do in whatsnew job " ++ name 
+  return () 
