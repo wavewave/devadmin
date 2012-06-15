@@ -134,7 +134,7 @@ constructBuildModes = do
                                   , pkgname = "" &= typ "PKGNAME" &= argPos 0 }
       cleanall = CleanAll { config = dotbuild 
                           , mpkgname = def &= typ "RESUMEPKG" &= args }
-      cloneall = CleanAll { config = dotbuild }
+      cloneall = CloneAll { config = dotbuild }
       mode = modes [ install, installseg, push, haddock, directdepshow
                    , showallordered
                    , depshow, pull, hoogle, hoogleall, whatsnew, bootstrap

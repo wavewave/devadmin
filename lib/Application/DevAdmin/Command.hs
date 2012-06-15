@@ -17,6 +17,11 @@ import Prelude hiding (mapM_)
 commandLineProcess :: BuildConfiguration -> ProjectConfiguration -> Build -> IO () 
 commandLineProcess bc pc bparam = do 
   let projects = pc_projects pc 
+  case bparam of 
+    CloneAll {..}   -> do 
+      let projstrs = map projname projects
+      forM_ projstrs (darcsGetJob bc)
+    _ -> return ()
   alllst <- makeProjDepList bc pc projects 
   case bparam of 
     Install {..}     -> do plst <- makeProjDepList bc pc [ProgProj pkgname] 
@@ -70,7 +75,6 @@ commandLineProcess bc pc bparam = do
                       Nothing -> alllst
                       Just apkg -> filterBefore apkg alllst 
       flip mapM_ alllst' (cabalCleanJob bc)
-    CloneAll {..}   -> forM_ alllst (darcsGetJob bc)
 
 
 filterBefore name list = dropWhile (/= name) list  
