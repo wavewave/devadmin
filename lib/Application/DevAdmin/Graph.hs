@@ -83,9 +83,6 @@ findOrder str strs = let (l,_r) = break (== str) strs
 constructMotherMap :: BuildConfiguration -> ProjectConfiguration 
                    -> IO (M.Map String [String])
 constructMotherMap bc pc = do 
-  {-  let projects = pc_projects pc
-  let (p,w) = (,) <$> bc_progbase <*> bc_workspacebase $ bc
-  gdescs <- mapM (readPackageDescription normal . getCabalFileName (p,w) ) projects -}
   let projects = pc_projects pc
   gdescs <- getAllGenPkgDesc bc pc 
   let deps = map ((,) <$> getPkgName <*> getDependency) gdescs
@@ -115,7 +112,7 @@ makeProjDepOrderList bc pc = do
   let projects = pc_projects pc 
   let idnamemap = idprojmap projects
       nameidmap = projidmap projects 
-  let (p,w) = (,) <$> bc_progbase <*> bc_workspacebase $ bc
+  let (p,w) = (,) <$> bc_srcbase <*> bc_workspacebase $ bc
   gdescs <- mapM (readPackageDescription normal . getCabalFileName (p,w) ) projects 
   let deps = map ((,) <$> getPkgName <*> getDependency) gdescs
       motherlist = map ((,) <$> fst  <*> (filter (nameMatch projects). snd)) deps

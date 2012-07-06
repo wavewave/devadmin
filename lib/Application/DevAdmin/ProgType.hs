@@ -77,17 +77,17 @@ data Build = Install     { config :: FilePath
            | HoogleAll   { config :: FilePath 
                          , mpkgname :: Maybe String 
                          } 
-           | Whatsnew    { config :: FilePath } 
+--           | Whatsnew    { config :: FilePath } 
            | Bootstrap   { config :: FilePath 
                          , mpkgname :: Maybe String } 
            | HaddockBoot { config :: FilePath 
                          , mpkgname :: Maybe String }
-           | Bridge      { config :: FilePath 
-                         , pkgname :: String }
-           | BridgeAll   { config :: FilePath 
-                         , mpkgname :: Maybe String } 
-           | CreateBridge { config :: FilePath 
-                          , pkgname :: String } 
+--           | Bridge      { config :: FilePath 
+--                         , pkgname :: String }
+--           | BridgeAll   { config :: FilePath 
+--                         , mpkgname :: Maybe String } 
+--           | CreateBridge { config :: FilePath 
+--                          , pkgname :: String } 
            | CleanAll { config :: FilePath 
                       , mpkgname :: Maybe String } 
            | CloneAll { config :: FilePath }
@@ -118,29 +118,29 @@ constructBuildModes = do
       hoogleall  = HoogleAll  { config = dotbuild 
                               , mpkgname = def &= typ "RESUMEPKG" &= args
                               }
-      whatsnew = Whatsnew { config = dotbuild } 
+--      whatsnew = Whatsnew { config = dotbuild } 
       bootstrap = Bootstrap { config = dotbuild 
                             , mpkgname = def &= typ "RESUMEPKG" &= args
                             } 
       haddockboot = HaddockBoot { config = dotbuild 
                                 , mpkgname = def &= typ "RESUMEPKG" &= args
                                 } 
-      bridge = Bridge { config = dotbuild 
-                      , pkgname = "" &= typ "PKGNAME" &= argPos 0 }
-      bridgeall = BridgeAll { config = dotbuild 
-                            , mpkgname = def &= typ "RESUMEPKG" &= args
-                            } 
-      createbridge = CreateBridge { config = dotbuild 
-                                  , pkgname = "" &= typ "PKGNAME" &= argPos 0 }
+--      bridge = Bridge { config = dotbuild 
+--                      , pkgname = "" &= typ "PKGNAME" &= argPos 0 }
+--      bridgeall = BridgeAll { config = dotbuild 
+--                            , mpkgname = def &= typ "RESUMEPKG" &= args
+--                            } 
+--      createbridge = CreateBridge { config = dotbuild 
+--                                  , pkgname = "" &= typ "PKGNAME" &= argPos 0 }
       cleanall = CleanAll { config = dotbuild 
                           , mpkgname = def &= typ "RESUMEPKG" &= args }
       cloneall = CloneAll { config = dotbuild }
       mode = modes [ install, installseg, push, haddock, directdepshow
                    , showallordered
-                   , depshow, pull, hoogle, hoogleall, whatsnew, bootstrap
-                   , haddockboot, bridge, bridgeall, createbridge, cleanall
+                   , depshow, pull, hoogle, hoogleall,  bootstrap
+                   , haddockboot, cleanall
                    , cloneall
                    ] 
-              
+--              whatsnew, bridge, bridgeall, createbridge,
   return mode 
                         

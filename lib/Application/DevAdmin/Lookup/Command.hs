@@ -35,12 +35,12 @@ commandLineProcess :: BuildConfiguration -> Lookup -> IO ()
 commandLineProcess bc lparam = do 
   case lparam of 
     Lookup {..} -> do 
-      let pkgdir = bc_progbase bc </> pkgname 
+      let pkgdir = bc_srcbase bc </> pkgname 
       putStrLn $ "pkgdir = " ++  pkgdir
       let (dirname,filename) = moduleDirFile modulename 
       putStrLn $ "dirname = " ++ dirname 
       putStrLn $ "filename = " ++ filename 
-      let (p,w) = (,) <$> bc_progbase <*> bc_workspacebase $ bc 
+      let (p,w) = (,) <$> bc_srcbase <*> bc_workspacebase $ bc 
       gdesc <- (readPackageDescription normal . getCabalFileName (p,w) . ProgProj) pkgname
 --      putStrLn $ show (condLibrary gdesc)
       case condLibrary gdesc of 

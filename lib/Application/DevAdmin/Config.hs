@@ -1,23 +1,36 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+-----------------------------------------------------------------------------
+-- |
+-- Module      : Application.DevAdmin.Config
+-- Copyright   : (c) 2011, 2012 Ian-Woo Kim
+--
+-- License     : BSD3
+-- Maintainer  : Ian-Woo Kim <ianwookim@gmail.com>
+-- Stability   : experimental
+-- Portability : GHC
+--
+-----------------------------------------------------------------------------
+
 module Application.DevAdmin.Config where
 
-import Application.DevAdmin.Project
 
 import Control.Applicative
-
+import Control.Monad
 import Data.Configurator.Types
 import Data.Configurator as C
-import Control.Monad
 import System.Directory 
 import System.Environment 
 import System.FilePath
+
+import Application.DevAdmin.Project
+
 
 -- | 
 
 data BuildConfiguration = BuildConfiguration { 
   bc_darcsrepobase :: String,
-  bc_progbase :: FilePath, 
+  -- bc_progbase :: FilePath, 
   bc_workspacebase :: FilePath, 
   bc_linkbase :: FilePath, 
   bc_docbase :: FilePath, 
@@ -63,7 +76,7 @@ liftM9 f m1 m2 m3 m4 m5 m6 m7 m8 m9 =
 getBuildConfiguration :: Config -> IO (Maybe BuildConfiguration)
 getBuildConfiguration c  = do 
     mdarcsrepobase <- C.lookup c "build.darcsrepobase"
-    mprogbase      <- C.lookup c "build.progbase"
+    -- mprogbase      <- C.lookup c "build.progbase"
     mworkspacebase <- C.lookup c "build.workspacebase"
     mlinkbase      <- C.lookup c "build.linkbase"
     mdocbase       <- C.lookup c "build.docbase"
@@ -74,7 +87,7 @@ getBuildConfiguration c  = do
     msrcbase       <- C.lookup c "build.srcbase"
     mgitrepobase   <- C.lookup c "build.gitrepobase"
     return ( BuildConfiguration <$> mdarcsrepobase
-                                <*> mprogbase
+                                -- <*> mprogbase
                                 <*> mworkspacebase
                                 <*> mlinkbase
                                 <*> mdocbase

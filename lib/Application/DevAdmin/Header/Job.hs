@@ -38,7 +38,7 @@ startHeaderJob bc pc name = do
     putStrLn $ "name = " ++ name
     -- putStrLn $ show bc 
     -- putStrLn $ show pc
-    let pkgpath =  (bc_progbase bc </> name)
+    let pkgpath =  (bc_srcbase bc </> name)
     setCurrentDirectory pkgpath
     gdesc <- readPackageDescription normal (pkgpath </> name <.> "cabal")
     let Just (CondNode lib y z) = condLibrary gdesc

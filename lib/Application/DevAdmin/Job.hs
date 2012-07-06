@@ -28,7 +28,7 @@ import Application.DevAdmin.Project
 import Application.DevAdmin.VersionCheck
 import Paths_devadmin
 
--- |
+-- | git clone 
 
 gitCloneJob :: BuildConfiguration -> String -> IO ()
 gitCloneJob bc name = do 
@@ -40,9 +40,7 @@ gitCloneJob bc name = do
       setCurrentDirectory (bc_srcbase bc </> name)
       system $ "git remote add github " ++ ((bc_gitrepobase bc) </> name <.> "git")
       system $ "git push github master"
-
       putStrLn "Successful. Press any key." 
-
       c <- getLine
       if (not.null $ c)
         then return () 
@@ -53,15 +51,32 @@ gitCloneJob bc name = do
       if (not.null $ c)
         then return () 
         else return ()
-
     _ -> do 
       putStrLn "Not successful. Press any key." 
       c <- getLine
       if (not.null $ c)
         then return () 
         else return ()
-
   return () 
+
+-- | git push for a project 
+
+gitPushJob :: BuildConfiguration -> String -> IO () 
+gitPushJob bc name = do 
+  putStrLn $ "git push : " ++  name
+  setCurrentDirectory ((bc_srcbase bc) </> name)
+  system $ "git push github master"
+  return () 
+
+-- | git pull for a project
+
+gitPullJob :: BuildConfiguration -> String -> IO () 
+gitPullJob bc name = do 
+  putStrLn $ "git pull : " ++  name
+  setCurrentDirectory ((bc_srcbase bc) </> name)
+  system $ "git pull github master"
+  return () 
+
 
 -- | 
 
@@ -76,7 +91,7 @@ cabalInstallJob :: BuildConfiguration -> String -> IO ()
 cabalInstallJob bc name = do 
   putStrLn $ "update : " ++  name
   system $ "ghc-pkg --force unregister " ++ name
-  setCurrentDirectory ((bc_progbase bc) </> name)
+  setCurrentDirectory ((bc_srcbase bc) </> name)
   excode <- system $ "cabal install"
   case excode of 
     ExitSuccess -> do 
@@ -87,45 +102,12 @@ cabalInstallJob bc name = do
   -- return () 
 
 
-darcsWhatsnewJob :: BuildConfiguration -> String -> IO () 
-darcsWhatsnewJob bc name = do 
-  putStrLn $ "darcs whatsnew : " ++ name
-  setCurrentDirectory ((bc_progbase bc) </> name)
-  excode <- system $ "darcs whatsnew"
-  case excode of 
-    ExitSuccess -> do 
-      putStrLn "some change happened. would you proceed to the next? (Y/N)" 
-      c <- getLine
-      if (not.null $ c) &&  (head c == 'y' || head c == 'Y')
-        then return () 
-        else darcsWhatsnewJob bc name 
-    ExitFailure 1 -> return () 
-    _ -> error $ "do not know what to do in whatsnew job " ++ name 
-  return () 
-  
-
-darcsPushJob :: BuildConfiguration -> String -> IO () 
-darcsPushJob bc name = do 
-  putStrLn $ "darcs push : " ++  name
-  setCurrentDirectory ((bc_progbase bc) </> name)
-  system $ "darcs push"
-  return () 
-
--- |
-
-darcsPullJob :: BuildConfiguration -> String -> IO () 
-darcsPullJob bc name = do 
-  putStrLn $ "darcs pull : " ++  name
-  setCurrentDirectory (bc_progbase bc </> name)
-  system $ "darcs pull"
-  return () 
-
 -- | 
 
 haddockJob :: BuildConfiguration -> String -> IO () 
 haddockJob bc name = do 
   putStrLn $ "haddock : " ++ name 
-  setCurrentDirectory ((bc_progbase bc) </> name)
+  setCurrentDirectory ((bc_srcbase bc) </> name)
   system $ "cabal install --enable-documentation"
   system $ "cabal haddock --hyperlink-source"
   system $ "cabal copy"
@@ -137,9 +119,9 @@ haddockJob bc name = do
 hoogleJob :: BuildConfiguration -> String -> IO () 
 hoogleJob bc name = do 
   putStrLn $ "hoogle : " ++ name
-  setCurrentDirectory ((bc_progbase bc) </> name) 
+  setCurrentDirectory ((bc_srcbase bc) </> name) 
   system $ "cabal haddock --hoogle" 
-  let hooglefile = (bc_progbase bc) </> name </> "dist/doc/html" </> name </> name ++ ".txt"
+  let hooglefile = (bc_srcbase bc) </> name </> "dist/doc/html" </> name </> name ++ ".txt"
   b <- doesFileExist hooglefile 
   if b 
     then copyFile hooglefile  ((bc_hoogleDatabase bc) </> name ++ ".txt")
@@ -147,6 +129,8 @@ hoogleJob bc name = do
   return () 
 
 -- | 
+
+{-
 
 bridgeJob :: BuildConfiguration -> String -> IO () 
 bridgeJob bc name = do 
@@ -189,11 +173,12 @@ createBridgeJob bc name = do
     then system "git push github master " >> return () 
     else putStrLn "later, please do git push github master " 
 
+
 {-
   system $ "git pull " ++ bridgegit
   system $ "git push github master" -}
   return () 
-
+-}
 
 
 updateHtml :: BuildConfiguration -> ProjectConfiguration -> IO () 
@@ -230,7 +215,7 @@ cabalCleanJob :: BuildConfiguration -> String -> IO ()
 cabalCleanJob bc name = do 
   putStrLn $ "cleaning : " ++  name
   system $ "ghc-pkg --force unregister " ++ name
-  setCurrentDirectory ((bc_progbase bc) </> name)
+  setCurrentDirectory ((bc_srcbase bc) </> name)
   excode <- system $ "cabal clean"
   case excode of 
     ExitSuccess -> do 
@@ -241,6 +226,8 @@ cabalCleanJob bc name = do
   -- return () 
 
 -- | 
+
+{-
 
 darcsGetJob :: BuildConfiguration -> String -> IO () 
 darcsGetJob bc name = do 
@@ -258,3 +245,40 @@ darcsGetJob bc name = do
     _ -> error $ "do not know what to do in whatsnew job " ++ name 
   return () 
 
+-- | 
+
+darcsWhatsnewJob :: BuildConfiguration -> String -> IO () 
+darcsWhatsnewJob bc name = do 
+  putStrLn $ "darcs whatsnew : " ++ name
+  setCurrentDirectory ((bc_progbase bc) </> name)
+  excode <- system $ "darcs whatsnew"
+  case excode of 
+    ExitSuccess -> do 
+      putStrLn "some change happened. would you proceed to the next? (Y/N)" 
+      c <- getLine
+      if (not.null $ c) &&  (head c == 'y' || head c == 'Y')
+        then return () 
+        else darcsWhatsnewJob bc name 
+    ExitFailure 1 -> return () 
+    _ -> error $ "do not know what to do in whatsnew job " ++ name 
+  return () 
+  
+-- |
+
+darcsPushJob :: BuildConfiguration -> String -> IO () 
+darcsPushJob bc name = do 
+  putStrLn $ "darcs push : " ++  name
+  setCurrentDirectory ((bc_progbase bc) </> name)
+  system $ "darcs push"
+  return () 
+
+-- |
+
+darcsPullJob :: BuildConfiguration -> String -> IO () 
+darcsPullJob bc name = do 
+  putStrLn $ "darcs pull : " ++  name
+  setCurrentDirectory (bc_progbase bc </> name)
+  system $ "darcs pull"
+  return () 
+
+-}

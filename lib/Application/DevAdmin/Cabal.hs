@@ -1,3 +1,16 @@
+
+-----------------------------------------------------------------------------
+-- |
+-- Module      : Application.DevAdmin.Cabal
+-- Copyright   : (c) 2011, 2012 Ian-Woo Kim
+--
+-- License     : BSD3
+-- Maintainer  : Ian-Woo Kim <ianwookim@gmail.com>
+-- Stability   : experimental
+-- Portability : GHC
+--
+-----------------------------------------------------------------------------
+
 module Application.DevAdmin.Cabal where
 
 import System.FilePath
@@ -13,8 +26,6 @@ import Distribution.Verbosity
 
 import Control.Applicative
 
-import Debug.Trace
-
 getGenPkgDesc :: (FilePath,FilePath) -> Project -> IO GenericPackageDescription 
 getGenPkgDesc (progbase,wkspacebase) proj =
   readPackageDescription normal . getCabalFileName (progbase,wkspacebase) $ proj
@@ -24,7 +35,7 @@ getAllGenPkgDesc :: BuildConfiguration -> ProjectConfiguration
                  -> IO [GenericPackageDescription]
 getAllGenPkgDesc bc pc = do 
   let projects = pc_projects pc
-  let (p,w) = (,) <$> bc_progbase <*> bc_workspacebase $ bc
+  let (p,w) = (,) <$> bc_srcbase <*> bc_workspacebase $ bc
   mapM (getGenPkgDesc (p,w)) projects
 
 

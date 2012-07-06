@@ -36,7 +36,7 @@ commandLineProcess bc pc bparam = do
                                let flst = intersect plst (pkgnamedest:allmothers)
                                (putStrLn.show) flst 
                                flip mapM_ flst (cabalInstallJob bc)
-    Push    {..}     ->    flip mapM_ alllst (darcsPushJob bc)
+    Push    {..}     ->    flip mapM_ alllst (gitPushJob bc)
     Haddock {..}     -> do plst <- makeProjDepList bc pc [ProgProj pkgname]
                            flip mapM_ plst   (haddockJob bc)
     DepShow {..}     -> do plst <- makeProjDepList bc pc [ProgProj pkgname]
@@ -44,14 +44,14 @@ commandLineProcess bc pc bparam = do
     ShowAllOrdered {..} -> do print alllst 
     DirectDepShow {..} -> do lst <- makeProjDirectDepList bc pc (ProgProj pkgname)
                              putStrLn $ show lst 
-    Pull {..}        ->    flip mapM_ alllst (darcsPullJob bc)
+    Pull {..}        ->    flip mapM_ alllst (gitPullJob bc)
     Hoogle {..}      ->    hoogleJob bc pkgname
     HoogleAll {..}   -> do 
       let alllst' = case mpkgname of 
                       Nothing -> alllst
                       Just apkg -> filterBefore apkg alllst 
       flip mapM_ alllst' (hoogleJob bc)
-    Whatsnew {..}    ->    flip mapM_ alllst (darcsWhatsnewJob bc)
+    -- Whatsnew {..}    ->    flip mapM_ alllst (darcsWhatsnewJob bc)
     Bootstrap {..}   -> do    
       let alllst' = case mpkgname of 
                       Nothing -> alllst
@@ -62,14 +62,14 @@ commandLineProcess bc pc bparam = do
                       Nothing -> alllst
                       Just apkg -> filterBefore apkg alllst 
       flip mapM_ alllst' (haddockJob bc)
-    Bridge {..} -> bridgeJob bc pkgname
-    BridgeAll {..} -> do 
-      let balllst = map projname (pc_bridgeprojects pc)
-      let balllst' = case mpkgname of 
-                       Nothing -> balllst 
-                       Just apkg -> filterBefore apkg balllst 
-      mapM_ (bridgeJob bc) balllst'
-    CreateBridge {..} ->  createBridgeJob bc pkgname
+    -- Bridge {..} -> bridgeJob bc pkgname
+    -- BridgeAll {..} -> do 
+    --   let balllst = map projname (pc_bridgeprojects pc)
+    --   let balllst' = case mpkgname of 
+    --                    Nothing -> balllst 
+    --                    Just apkg -> filterBefore apkg balllst 
+    --   mapM_ (bridgeJob bc) balllst'
+    -- CreateBridge {..} ->  createBridgeJob bc pkgname
     CleanAll {..}   -> do    
       let alllst' = case mpkgname of 
                       Nothing -> alllst
