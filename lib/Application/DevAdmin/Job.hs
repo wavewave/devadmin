@@ -1,3 +1,16 @@
+
+-----------------------------------------------------------------------------
+-- |
+-- Module      : Application.DevAdmin.Job 
+-- Copyright   : (c) 2011, 2012 Ian-Woo Kim
+--
+-- License     : BSD3
+-- Maintainer  : Ian-Woo Kim <ianwookim@gmail.com>
+-- Stability   : experimental
+-- Portability : GHC
+--
+-----------------------------------------------------------------------------
+
 module Application.DevAdmin.Job where
 
 import Control.Applicative
@@ -14,6 +27,41 @@ import Application.DevAdmin.Config
 import Application.DevAdmin.Project
 import Application.DevAdmin.VersionCheck
 import Paths_devadmin
+
+-- |
+
+gitCloneJob :: BuildConfiguration -> String -> IO ()
+gitCloneJob bc name = do 
+  putStrLn $ "git clone : " ++ name
+  setCurrentDirectory (bc_srcbase bc)
+  excode <- system $ "git clone " ++ ((bc_gitrepobase bc) </> name <.> "git")
+  case excode of 
+    ExitSuccess -> do 
+      setCurrentDirectory (bc_srcbase bc </> name)
+      system $ "git remote add github " ++ ((bc_gitrepobase bc) </> name <.> "git")
+      system $ "git push github master"
+
+      putStrLn "Successful. Press any key." 
+
+      c <- getLine
+      if (not.null $ c)
+        then return () 
+        else return ()
+    ExitFailure 1 -> do 
+      putStrLn "Not successful. Press any key." 
+      c <- getLine
+      if (not.null $ c)
+        then return () 
+        else return ()
+
+    _ -> do 
+      putStrLn "Not successful. Press any key." 
+      c <- getLine
+      if (not.null $ c)
+        then return () 
+        else return ()
+
+  return () 
 
 -- | 
 
@@ -209,3 +257,4 @@ darcsGetJob bc name = do
     ExitFailure 1 -> return () 
     _ -> error $ "do not know what to do in whatsnew job " ++ name 
   return () 
+

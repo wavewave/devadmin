@@ -20,7 +20,7 @@ commandLineProcess bc pc bparam = do
   case bparam of 
     CloneAll {..}   -> do 
       let projstrs = map projname projects
-      forM_ projstrs (darcsGetJob bc)
+      forM_ projstrs (gitCloneJob bc)
     _ -> return ()
   alllst <- makeProjDepList bc pc projects 
   case bparam of 

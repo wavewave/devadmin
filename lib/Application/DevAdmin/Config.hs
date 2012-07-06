@@ -24,7 +24,9 @@ data BuildConfiguration = BuildConfiguration {
   bc_hoogleDatabase :: FilePath, 
   bc_bridgebase :: FilePath, 
   bc_gitbase :: FilePath, 
-  bc_emacsserver :: String
+  bc_emacsserver :: String, 
+  bc_srcbase :: FilePath, 
+  bc_gitrepobase :: FilePath
 } deriving (Show)
 
 data ProjectConfiguration = ProjectConfiguration { 
@@ -59,17 +61,31 @@ liftM9 f m1 m2 m3 m4 m5 m6 m7 m8 m9 =
   do { x1 <- m1 ; x2 <- m2 ; x3 <- m3 ; x4 <- m4 ; x5 <- m5 ; x6 <- m6 ; x7 <- m7 ; x8 <- m8 ; x9 <- m9 ; return (f x1 x2 x3 x4 x5 x6 x7 x8 x9) }
 
 getBuildConfiguration :: Config -> IO (Maybe BuildConfiguration)
-getBuildConfiguration c  = 
-  liftM9 BuildConfiguration 
-  <$> C.lookup c "build.darcsrepobase"
-  <*> C.lookup c "build.progbase"
-  <*> C.lookup c "build.workspacebase"
-  <*> C.lookup c "build.linkbase"
-  <*> C.lookup c "build.docbase"
-  <*> C.lookup c "build.hoogle"
-  <*> C.lookup c "build.bridge"
-  <*> C.lookup c "build.git"
-  <*> C.lookup c "build.emacsserver"
+getBuildConfiguration c  = do 
+    mdarcsrepobase <- C.lookup c "build.darcsrepobase"
+    mprogbase      <- C.lookup c "build.progbase"
+    mworkspacebase <- C.lookup c "build.workspacebase"
+    mlinkbase      <- C.lookup c "build.linkbase"
+    mdocbase       <- C.lookup c "build.docbase"
+    mhoogle        <- C.lookup c "build.hoogle"
+    mbridge        <- C.lookup c "build.bridge"
+    mgit           <- C.lookup c "build.git"
+    memacsserver   <- C.lookup c "build.emacsserver"
+    msrcbase       <- C.lookup c "build.srcbase"
+    mgitrepobase   <- C.lookup c "build.gitrepobase"
+    return ( BuildConfiguration <$> mdarcsrepobase
+                                <*> mprogbase
+                                <*> mworkspacebase
+                                <*> mlinkbase
+                                <*> mdocbase
+                                <*> mhoogle
+                                <*> mbridge
+                                <*> mgit
+                                <*> memacsserver 
+                                <*> msrcbase
+                                <*> mgitrepobase )
+
+
 
 getProjectConfiguration :: Config -> IO (Maybe ProjectConfiguration)
 getProjectConfiguration c  = 
