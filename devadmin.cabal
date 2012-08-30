@@ -27,9 +27,20 @@ Library
   hs-source-dirs: lib
   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
   ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, mtl>2, filepath > 1, unix > 2, directory, process, 
-                 Cabal, containers, fgl, time, 
-                 HStringTemplateHelpersIW, 
+  Build-Depends: base>4, 
+                 mtl>2, 
+                 filepath > 1, 
+                 unix > 2, 
+                 directory, 
+                 process, 
+                 Cabal, 
+                 containers, 
+                 fgl, 
+                 time, 
+                 filemanip == 0.3.*,
+                 safe == 0.3.*,
+                 HSH == 2.0.*,
+                 -- HStringTemplateHelpersIW, 
                  HStringTemplate, 
                  parsec > 3 && < 4, 
                  configurator == 0.2.*, 
@@ -57,7 +68,7 @@ Library
                    Application.DevAdmin.Header.ProgType
                    Application.DevAdmin.Header.Command
                    Application.DevAdmin.Header.Job
-
+                   Text.StringTemplate.Helpers
 Executable build 
   Main-is: build.hs
   hs-source-dirs: exe
