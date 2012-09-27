@@ -77,7 +77,7 @@ data Build = Install     { config :: FilePath
            | HoogleAll   { config :: FilePath 
                          , mpkgname :: Maybe String 
                          } 
---           | Whatsnew    { config :: FilePath } 
+           | Diff        { config :: FilePath } 
            | Bootstrap   { config :: FilePath 
                          , mpkgname :: Maybe String } 
            | HaddockBoot { config :: FilePath 
@@ -118,7 +118,7 @@ constructBuildModes = do
       hoogleall  = HoogleAll  { config = dotbuild 
                               , mpkgname = def &= typ "RESUMEPKG" &= args
                               }
---      whatsnew = Whatsnew { config = dotbuild } 
+      diff  = Diff { config = dotbuild } 
       bootstrap = Bootstrap { config = dotbuild 
                             , mpkgname = def &= typ "RESUMEPKG" &= args
                             } 
@@ -140,6 +140,7 @@ constructBuildModes = do
                    , depshow, pull, hoogle, hoogleall,  bootstrap
                    , haddockboot, cleanall
                    , cloneall
+                   , diff
                    ] 
 --              whatsnew, bridge, bridgeall, createbridge,
   return mode 

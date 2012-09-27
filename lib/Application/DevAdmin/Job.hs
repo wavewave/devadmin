@@ -228,7 +228,6 @@ cabalCleanJob bc name = do
 -- | 
 
 {-
-
 darcsGetJob :: BuildConfiguration -> String -> IO () 
 darcsGetJob bc name = do 
   putStrLn $ "darcs get : " ++ name
@@ -244,27 +243,28 @@ darcsGetJob bc name = do
     ExitFailure 1 -> return () 
     _ -> error $ "do not know what to do in whatsnew job " ++ name 
   return () 
+-}
 
 -- | 
-
-darcsWhatsnewJob :: BuildConfiguration -> String -> IO () 
-darcsWhatsnewJob bc name = do 
-  putStrLn $ "darcs whatsnew : " ++ name
-  setCurrentDirectory ((bc_progbase bc) </> name)
-  excode <- system $ "darcs whatsnew"
+gitDiffJob :: BuildConfiguration -> String -> IO () 
+gitDiffJob bc name = do 
+  putStrLn $ "git diff : " ++ name
+  setCurrentDirectory ((bc_srcbase bc) </> name)
+  excode <- system $ "git diff"
   case excode of 
     ExitSuccess -> do 
       putStrLn "some change happened. would you proceed to the next? (Y/N)" 
       c <- getLine
       if (not.null $ c) &&  (head c == 'y' || head c == 'Y')
         then return () 
-        else darcsWhatsnewJob bc name 
+        else gitDiffJob bc name 
     ExitFailure 1 -> return () 
     _ -> error $ "do not know what to do in whatsnew job " ++ name 
   return () 
   
--- |
+{-
 
+-- |
 darcsPushJob :: BuildConfiguration -> String -> IO () 
 darcsPushJob bc name = do 
   putStrLn $ "darcs push : " ++  name
@@ -273,7 +273,6 @@ darcsPushJob bc name = do
   return () 
 
 -- |
-
 darcsPullJob :: BuildConfiguration -> String -> IO () 
 darcsPullJob bc name = do 
   putStrLn $ "darcs pull : " ++  name
