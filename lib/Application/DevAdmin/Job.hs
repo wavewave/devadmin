@@ -111,7 +111,7 @@ haddockJob bc name = do
   system $ "cabal install --enable-documentation"
   system $ "cabal haddock --hyperlink-source"
   system $ "cabal copy"
-  versioncheck bc
+  -- versioncheck bc
   return () 
 
 -- | 

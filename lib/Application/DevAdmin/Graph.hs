@@ -133,7 +133,6 @@ makeProjDepList :: BuildConfiguration -> ProjectConfiguration -> [Project]
 makeProjDepList bc pc projs = do 
   let projnames = map projname projs
   (daughtermap,strlst) <- makeProjDepOrderList bc pc
-     
   let alldaughters = nub . concatMap (findAllDaughters daughtermap) $ projnames
       numbered = map (\x -> findOrder x strlst) alldaughters 
       finallist = map snd . sortBy (compare `on` fst) $ numbered 

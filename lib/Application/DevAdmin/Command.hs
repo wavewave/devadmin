@@ -18,6 +18,8 @@ commandLineProcess :: BuildConfiguration -> ProjectConfiguration -> Build -> IO 
 commandLineProcess bc pc bparam = do 
   let projects = pc_projects pc 
   case bparam of 
+    Clone {..} -> do 
+      gitCloneJob bc pkgname 
     CloneAll {..}   -> do 
       let projstrs = map projname projects
       forM_ projstrs (gitCloneJob bc)
