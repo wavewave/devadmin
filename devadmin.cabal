@@ -86,28 +86,28 @@ Executable html
   Build-Depends: base>4, mtl>2, filepath > 1, devadmin 
 
 		 
-Executable devconfig 
-  Main-is: devconfig.hs
-  hs-source-dirs: exe
-  ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
-  ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, mtl>2, cmdargs == 0.9.*, devadmin
+-- Executable devconfig 
+--   Main-is: devconfig.hs
+--   hs-source-dirs: exe
+--   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
+--   ghc-prof-options: -caf-all -auto-all
+--   Build-Depends: base>4, mtl>2, cmdargs == 0.9.*, devadmin
 
-Executable lookup
-  Main-is: lookup.hs
-  hs-source-dirs: exe
-  ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
-  ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, filepath>1, devadmin,
-                 cmdargs == 0.9.*
+-- Executable lookup
+--   Main-is: lookup.hs
+--  hs-source-dirs: exe
+--  ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
+--  ghc-prof-options: -caf-all -auto-all
+--  Build-Depends: base>4, filepath>1, devadmin,
+--                 cmdargs == 0.9.*
 
-Executable refactor
-  Main-is: refactor.hs
-  hs-source-dirs: exe
-  ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
-  ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, filepath>1, devadmin,
-                 cmdargs==0.9.*
+-- Executable refactor
+--  Main-is: refactor.hs
+--  hs-source-dirs: exe
+--  ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
+--  ghc-prof-options: -caf-all -auto-all
+--  Build-Depends: base>4, filepath>1, devadmin,
+--                 cmdargs==0.9.*
 		 
 -- Executable showall
 --   Main-is: showall.hs

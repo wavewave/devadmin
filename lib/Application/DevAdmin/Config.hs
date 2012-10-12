@@ -43,9 +43,9 @@ data BuildConfiguration = BuildConfiguration {
 } deriving (Show)
 
 data ProjectConfiguration = ProjectConfiguration { 
-  pc_projects :: [Project], 
-  pc_bridgeprojects :: [Project], 
-  pc_hoogleprojects :: Maybe [Project]
+  pc_projects :: [Project]
+  -- , pc_bridgeprojects :: [Project]
+  -- , pc_hoogleprojects :: Maybe [Project]
 } deriving (Show)
 
 withBuildFile :: ((BuildConfiguration,ProjectConfiguration) -> IO ()) -> IO ()
@@ -102,8 +102,8 @@ getBuildConfiguration c  = do
 
 getProjectConfiguration :: Config -> IO (Maybe ProjectConfiguration)
 getProjectConfiguration c  = 
-  liftM3 ProjectConfiguration 
+  liftM ProjectConfiguration 
   <$> C.lookup c "projects"
-  <*> C.lookup c "bridgeproj"
-  <*> (C.lookup c "hoogleproj" >>= return . pure ) 
+  -- <*> C.lookup c "bridgeproj"
+  -- <*> (C.lookup c "hoogleproj" >>= return . pure ) 
 
