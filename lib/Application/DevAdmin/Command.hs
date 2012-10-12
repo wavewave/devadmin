@@ -53,7 +53,7 @@ commandLineProcess bc pc bparam = do
                       Nothing -> alllst
                       Just apkg -> filterBefore apkg alllst 
       flip mapM_ alllst' (hoogleJob bc)
-    -- Whatsnew {..}    ->    flip mapM_ alllst (darcsWhatsnewJob bc)
+    Diff {..}    ->    flip mapM_ alllst (gitDiffJob bc)
     Bootstrap {..}   -> do    
       let alllst' = case mpkgname of 
                       Nothing -> alllst
