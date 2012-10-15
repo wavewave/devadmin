@@ -59,15 +59,15 @@ Library
                    Application.DevAdmin.VersionCheck 
                    Application.DevAdmin.ProgType
                    Application.DevAdmin.Command
-                   Application.DevAdmin.Lookup.ProgType 
-                   Application.DevAdmin.Lookup.Command
-                   Application.DevAdmin.Refactor.ProgType
-                   Application.DevAdmin.Refactor.Command
-                   Application.DevAdmin.Refactor.Job
-                   Application.DevAdmin.Refactor.Parse.Import 
-                   Application.DevAdmin.Header.ProgType
-                   Application.DevAdmin.Header.Command
-                   Application.DevAdmin.Header.Job
+                   -- Application.DevAdmin.Lookup.ProgType 
+                   -- Application.DevAdmin.Lookup.Command
+                   -- Application.DevAdmin.Refactor.ProgType
+                   -- Application.DevAdmin.Refactor.Command
+                   -- Application.DevAdmin.Refactor.Job
+                   -- Application.DevAdmin.Refactor.Parse.Import 
+                   -- Application.DevAdmin.Header.ProgType
+                   -- Application.DevAdmin.Header.Command
+                   -- Application.DevAdmin.Header.Job
                    Text.StringTemplate.Helpers
 Executable build 
   Main-is: build.hs
@@ -78,12 +78,12 @@ Executable build
                  devadmin, configurator, text,
                  cmdargs == 0.9.*
 		 
-Executable html 
-  Main-is: html.hs
-  hs-source-dirs: exe
-  ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
-  ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, mtl>2, filepath > 1, devadmin 
+-- Executable html 
+--   Main-is: html.hs
+--   hs-source-dirs: exe
+--   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
+--   ghc-prof-options: -caf-all -auto-all
+-- Build-Depends: base>4, mtl>2, filepath > 1, devadmin 
 
 		 
 -- Executable devconfig 
@@ -124,12 +124,12 @@ Executable html
 --                 -- , 
 --                 -- HROOT
                  
-Executable header
-  Main-is: header.hs
-  hs-source-dirs: exe
-  ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
-  ghc-prof-options: -caf-all -auto-all
-  Build-Depends: base>4, filepath>1, devadmin,
-                 cmdargs==0.9.*
+-- Executable header
+--   Main-is: header.hs
+--   hs-source-dirs: exe
+--   ghc-options: 	-Wall -O2 -threaded -funbox-strict-fields -fno-warn-unused-do-bind
+--   ghc-prof-options: -caf-all -auto-all
+--   Build-Depends: base>4, filepath>1, devadmin,
+--                  cmdargs==0.9.*
 
 

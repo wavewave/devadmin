@@ -34,7 +34,8 @@ nameVersion = do
   n <- cabalName 
   v <- cabalVersion 
   return (n,v)
-  
+
+{-  
 versioncheck :: BuildConfiguration -> IO ()
 versioncheck bc = do 
   putStrLn "version check"
@@ -61,3 +62,4 @@ versioncheck bc = do
     
   return () 
   
+-}

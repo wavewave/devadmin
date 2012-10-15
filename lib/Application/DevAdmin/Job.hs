@@ -103,7 +103,6 @@ cabalInstallJob bc name = do
 
 
 -- | 
-
 haddockJob :: BuildConfiguration -> String -> IO () 
 haddockJob bc name = do 
   putStrLn $ "haddock : " ++ name 
@@ -114,8 +113,8 @@ haddockJob bc name = do
   -- versioncheck bc
   return () 
 
+{-
 -- | 
-
 hoogleJob :: BuildConfiguration -> String -> IO () 
 hoogleJob bc name = do 
   putStrLn $ "hoogle : " ++ name
@@ -127,6 +126,7 @@ hoogleJob bc name = do
     then copyFile hooglefile  ((bc_hoogleDatabase bc) </> name ++ ".txt")
     else putStrLn $ "no such file : " ++ hooglefile 
   return () 
+-}
 
 -- | 
 
@@ -180,7 +180,7 @@ createBridgeJob bc name = do
   return () 
 -}
 
-
+{-
 updateHtml :: BuildConfiguration -> ProjectConfiguration -> IO () 
 updateHtml bc pc = do
   let projects = pc_projects pc 
@@ -193,7 +193,9 @@ updateHtml bc pc = do
               [ ("body" , progbodystr) ] 
               "proghtml.html" 
   writeFile ((bc_linkbase bc) </> "proghtml.html") str
+-}
 
+{-
 progbody :: BuildConfiguration -> Project -> IO String
 progbody bc (ProgProj prjname) = do 
   tmpldir <- (</> "template") <$> getDataDir
@@ -207,7 +209,9 @@ progbody bc (ProgProj prjname) = do
               "progbody.html"
   return str 
 progbody _ _ = error "no match error in progbody"
- 
+-}
+
+
 
 -- | 
 
@@ -261,6 +265,19 @@ gitDiffJob bc name = do
     ExitFailure 1 -> return () 
     _ -> error $ "do not know what to do in whatsnew job " ++ name 
   return () 
+
+
+-- | 
+haddockSandBoxJob :: FilePath -> BuildConfiguration -> String -> IO () 
+haddockSandBoxJob fp bc name = do 
+  putStrLn $ "haddock : " ++ name 
+  setCurrentDirectory ((bc_srcbase bc) </> name)
+  system $ "cabal-dev install --enable-documentation --sandbox="++ fp
+  system $ "cabal-dev haddock --hyperlink-source --sandbox=" ++ fp 
+  system $ "cabal-dev copy --sandbox=" ++ fp 
+  -- versioncheck bc
+  return () 
+
   
 {-
 

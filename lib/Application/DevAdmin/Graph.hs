@@ -112,8 +112,9 @@ makeProjDepOrderList bc pc = do
   let projects = pc_projects pc 
   let idnamemap = idprojmap projects
       nameidmap = projidmap projects 
-  let (p,w) = (,) <$> bc_srcbase <*> bc_workspacebase $ bc
-  gdescs <- mapM (readPackageDescription normal . getCabalFileName (p,w) ) projects 
+  -- let (p,w) = (,) <$> bc_srcbase <*> bc_workspacebase $ bc
+      p = bc_srcbase bc 
+  gdescs <- mapM (readPackageDescription normal . getCabalFileName p ) projects 
   let deps = map ((,) <$> getPkgName <*> getDependency) gdescs
       motherlist = map ((,) <$> fst  <*> (filter (nameMatch projects). snd)) deps
       daughtermap = convertMotherMapToDaughterMap motherlist 

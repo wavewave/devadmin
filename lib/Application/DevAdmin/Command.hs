@@ -47,12 +47,12 @@ commandLineProcess bc pc bparam = do
     DirectDepShow {..} -> do lst <- makeProjDirectDepList bc pc (ProgProj pkgname)
                              putStrLn $ show lst 
     Pull {..}        ->    flip mapM_ alllst (gitPullJob bc)
-    Hoogle {..}      ->    hoogleJob bc pkgname
-    HoogleAll {..}   -> do 
-      let alllst' = case mpkgname of 
-                      Nothing -> alllst
-                      Just apkg -> filterBefore apkg alllst 
-      flip mapM_ alllst' (hoogleJob bc)
+    -- Hoogle {..}      ->    hoogleJob bc pkgname
+    -- HoogleAll {..}   -> do 
+    --   let alllst' = case mpkgname of 
+    --                   Nothing -> alllst
+    --                   Just apkg -> filterBefore apkg alllst 
+    --   flip mapM_ alllst' (hoogleJob bc)
     Diff {..}    ->    flip mapM_ alllst (gitDiffJob bc)
     Bootstrap {..}   -> do    
       let alllst' = case mpkgname of 
@@ -77,6 +77,11 @@ commandLineProcess bc pc bparam = do
                       Nothing -> alllst
                       Just apkg -> filterBefore apkg alllst 
       flip mapM_ alllst' (cabalCleanJob bc)
+    HaddockBootSandBox {..} -> do 
+      let alllst' = alllst -- case mpkgname of 
+                    --   Nothing -> alllst
+                    --   Just apkg -> filterBefore apkg alllst 
+      flip mapM_ alllst' (haddockSandBoxJob dir bc)
 
 
 filterBefore name list = dropWhile (/= name) list  

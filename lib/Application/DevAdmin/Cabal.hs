@@ -26,17 +26,17 @@ import Distribution.Verbosity
 
 import Control.Applicative
 
-getGenPkgDesc :: (FilePath,FilePath) -> Project -> IO GenericPackageDescription 
-getGenPkgDesc (progbase,wkspacebase) proj =
-  readPackageDescription normal . getCabalFileName (progbase,wkspacebase) $ proj
+getGenPkgDesc :: FilePath -> Project -> IO GenericPackageDescription 
+getGenPkgDesc progbase proj =
+  readPackageDescription normal . getCabalFileName progbase $ proj
 
 
 getAllGenPkgDesc :: BuildConfiguration -> ProjectConfiguration 
                  -> IO [GenericPackageDescription]
 getAllGenPkgDesc bc pc = do 
   let projects = pc_projects pc
-  let (p,w) = (,) <$> bc_srcbase <*> bc_workspacebase $ bc
-  mapM (getGenPkgDesc (p,w)) projects
+  -- let (p,w) = (,) <$> bc_srcbase <*> bc_workspacebase $ bc
+  mapM (getGenPkgDesc (bc_srcbase bc)) projects
 
 
 getPkgName :: GenericPackageDescription -> String 
@@ -49,10 +49,10 @@ getDependency desc = let rlib = condLibrary desc
                           Nothing -> []
                           Just lib -> map matchDependentPackageName . condTreeConstraints $ lib
 
-getCabalFileName :: (FilePath,FilePath) -> Project -> FilePath 
-getCabalFileName (prog,_workspace) (ProgProj pname) = prog </> pname </> (pname ++ ".cabal")
-getCabalFileName (_prog,workspace) (WorkspaceProj wname pname) 
-  = workspace </> wname </> pname </> (pname ++ ".cabal") 
+getCabalFileName :: FilePath -> Project -> FilePath 
+getCabalFileName prog (ProgProj pname) = prog </> pname </> (pname ++ ".cabal")
+-- getCabalFileName (_prog,workspace) (WorkspaceProj wname pname) 
+--   = workspace </> wname </> pname </> (pname ++ ".cabal") 
 
 matchDependentPackageName :: Dependency -> String 
 matchDependentPackageName (Dependency (PackageName x)  _) = x

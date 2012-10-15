@@ -8,8 +8,8 @@ import Data.Configurator.Types
 
 type ProjName = String 
 
-data Project = WorkspaceProj { workspacename :: String, projname :: ProjName } 
-             | ProgProj { projname :: ProjName } 
+data Project = -- WorkspaceProj { workspacename :: String, projname :: ProjName } 
+               ProgProj { projname :: ProjName } 
              deriving (Show,Eq,Ord) 
 
 instance Configured Project where
