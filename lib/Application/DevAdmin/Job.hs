@@ -69,7 +69,6 @@ gitPushJob bc name = do
   return () 
 
 -- | git pull for a project
-
 gitPullJob :: BuildConfiguration -> String -> IO () 
 gitPullJob bc name = do 
   putStrLn $ "git pull : " ++  name
@@ -79,9 +78,8 @@ gitPullJob bc name = do
 
 
 -- | 
-
-depshowJob :: BuildConfiguration -> String -> IO () 
-depshowJob _bc name = do 
+showJob :: BuildConfiguration -> String -> IO () 
+showJob _bc name = do 
    putStrLn $ "currently working on " ++ name 
 
 
@@ -112,6 +110,105 @@ haddockJob bc name = do
   system $ "cabal copy"
   -- versioncheck bc
   return () 
+
+
+-- | 
+cabalCleanJob :: BuildConfiguration -> String -> IO () 
+cabalCleanJob bc name = do 
+  putStrLn $ "cleaning : " ++  name
+  system $ "ghc-pkg --force unregister " ++ name
+  setCurrentDirectory ((bc_srcbase bc) </> name)
+  excode <- system $ "cabal clean"
+  case excode of 
+    ExitSuccess -> do 
+      putStrLn "successful clean"
+      putStrLn "-----------------------"
+    ExitFailure ecd -> error $ "not successful installation of " ++ name
+                               ++ " with exit code " ++ show ecd 
+  -- return () 
+
+
+-- | 
+gitDiffJob :: BuildConfiguration -> String -> IO () 
+gitDiffJob bc name = do 
+  putStrLn $ "git diff : " ++ name
+  setCurrentDirectory ((bc_srcbase bc) </> name)
+  excode <- system $ "git diff"
+  case excode of 
+    ExitSuccess -> do 
+      putStrLn "some change happened. would you proceed to the next? (Y/N)" 
+      c <- getLine
+      if (not.null $ c) &&  (head c == 'y' || head c == 'Y')
+        then return () 
+        else gitDiffJob bc name 
+    ExitFailure 1 -> return () 
+    _ -> error $ "do not know what to do in whatsnew job " ++ name 
+  return () 
+
+
+-- | 
+haddockSandBoxJob :: FilePath -> BuildConfiguration -> String -> IO () 
+haddockSandBoxJob fp bc name = do 
+  putStrLn $ "haddock : " ++ name 
+  setCurrentDirectory ((bc_srcbase bc) </> name)
+  system $ "cabal-dev install --enable-documentation --sandbox="++ fp
+  system $ "cabal-dev haddock --hyperlink-source --sandbox=" ++ fp 
+  system $ "cabal-dev copy --sandbox=" ++ fp 
+  -- versioncheck bc
+  return () 
+
+-- | make an index file for each package
+updateHtml :: FilePath -> BuildConfiguration -> ProjectConfiguration -> IO () 
+updateHtml fp bc pc = do
+  let projects = pc_projects pc 
+  tmpldir <- (</> "template") <$> getDataDir   
+  templates <- directoryGroup tmpldir 
+  progbodystr <- mapM (progbody fp bc) projects >>= return . concat
+  let str = renderTemplateGroup 
+              templates 
+              [ ("body" , progbodystr) ] 
+              "proghtml.html" 
+  writeFile (fp </> "share" </> "doc" </> "index.html") str
+
+
+
+progbody :: FilePath -> BuildConfiguration -> Project -> IO String
+progbody fp bc (ProgProj prjname) = do 
+  prjnameversion <- getProjNameWithVersion bc prjname 
+  tmpldir <- (</> "template") <$> getDataDir
+  templates <- directoryGroup tmpldir
+  let str = renderTemplateGroup
+              templates 
+              [ ("progindexhtml",  prjnameversion 
+                                   </> "html/index.html") 
+              , ("progname", prjnameversion) ] 
+              "progbody.html"
+  return str 
+progbody _ _ _ = error "no match error in progbody"
+
+
+
+  
+{-
+
+-- |
+darcsPushJob :: BuildConfiguration -> String -> IO () 
+darcsPushJob bc name = do 
+  putStrLn $ "darcs push : " ++  name
+  setCurrentDirectory ((bc_progbase bc) </> name)
+  system $ "darcs push"
+  return () 
+
+-- |
+darcsPullJob :: BuildConfiguration -> String -> IO () 
+darcsPullJob bc name = do 
+  putStrLn $ "darcs pull : " ++  name
+  setCurrentDirectory (bc_progbase bc </> name)
+  system $ "darcs pull"
+  return () 
+
+-}
+
 
 {-
 -- | 
@@ -180,56 +277,7 @@ createBridgeJob bc name = do
   return () 
 -}
 
-{-
-updateHtml :: BuildConfiguration -> ProjectConfiguration -> IO () 
-updateHtml bc pc = do
-  let projects = pc_projects pc 
-  tmpldir <- (</> "template") <$> getDataDir   
-  templates <- directoryGroup tmpldir 
-  progbodystr <- mapM (progbody bc) projects >>= return . concat
 
-  let str = renderTemplateGroup 
-              templates 
-              [ ("body" , progbodystr) ] 
-              "proghtml.html" 
-  writeFile ((bc_linkbase bc) </> "proghtml.html") str
--}
-
-{-
-progbody :: BuildConfiguration -> Project -> IO String
-progbody bc (ProgProj prjname) = do 
-  tmpldir <- (</> "template") <$> getDataDir
-  templates <- directoryGroup tmpldir
-  let str = renderTemplateGroup
-              templates 
-              [ ("progindexhtml", "file://" </> (bc_linkbase bc) 
-                                            </> prjname 
-                                            </> "html/index.html") 
-              , ("progname", prjname) ] 
-              "progbody.html"
-  return str 
-progbody _ _ = error "no match error in progbody"
--}
-
-
-
--- | 
-
-cabalCleanJob :: BuildConfiguration -> String -> IO () 
-cabalCleanJob bc name = do 
-  putStrLn $ "cleaning : " ++  name
-  system $ "ghc-pkg --force unregister " ++ name
-  setCurrentDirectory ((bc_srcbase bc) </> name)
-  excode <- system $ "cabal clean"
-  case excode of 
-    ExitSuccess -> do 
-      putStrLn "successful clean"
-      putStrLn "-----------------------"
-    ExitFailure ecd -> error $ "not successful installation of " ++ name
-                               ++ " with exit code " ++ show ecd 
-  -- return () 
-
--- | 
 
 {-
 darcsGetJob :: BuildConfiguration -> String -> IO () 
@@ -247,54 +295,4 @@ darcsGetJob bc name = do
     ExitFailure 1 -> return () 
     _ -> error $ "do not know what to do in whatsnew job " ++ name 
   return () 
--}
-
--- | 
-gitDiffJob :: BuildConfiguration -> String -> IO () 
-gitDiffJob bc name = do 
-  putStrLn $ "git diff : " ++ name
-  setCurrentDirectory ((bc_srcbase bc) </> name)
-  excode <- system $ "git diff"
-  case excode of 
-    ExitSuccess -> do 
-      putStrLn "some change happened. would you proceed to the next? (Y/N)" 
-      c <- getLine
-      if (not.null $ c) &&  (head c == 'y' || head c == 'Y')
-        then return () 
-        else gitDiffJob bc name 
-    ExitFailure 1 -> return () 
-    _ -> error $ "do not know what to do in whatsnew job " ++ name 
-  return () 
-
-
--- | 
-haddockSandBoxJob :: FilePath -> BuildConfiguration -> String -> IO () 
-haddockSandBoxJob fp bc name = do 
-  putStrLn $ "haddock : " ++ name 
-  setCurrentDirectory ((bc_srcbase bc) </> name)
-  system $ "cabal-dev install --enable-documentation --sandbox="++ fp
-  system $ "cabal-dev haddock --hyperlink-source --sandbox=" ++ fp 
-  system $ "cabal-dev copy --sandbox=" ++ fp 
-  -- versioncheck bc
-  return () 
-
-  
-{-
-
--- |
-darcsPushJob :: BuildConfiguration -> String -> IO () 
-darcsPushJob bc name = do 
-  putStrLn $ "darcs push : " ++  name
-  setCurrentDirectory ((bc_progbase bc) </> name)
-  system $ "darcs push"
-  return () 
-
--- |
-darcsPullJob :: BuildConfiguration -> String -> IO () 
-darcsPullJob bc name = do 
-  putStrLn $ "darcs pull : " ++  name
-  setCurrentDirectory (bc_progbase bc </> name)
-  system $ "darcs pull"
-  return () 
-
 -}

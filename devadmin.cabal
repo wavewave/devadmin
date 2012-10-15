@@ -44,8 +44,8 @@ Library
                  HStringTemplate, 
                  parsec > 3 && < 4, 
                  configurator == 0.2.*, 
-                 cmdargs == 0.9.*,
-                 split == 0.1.*, 
+                 cmdargs > 0.7 && < 0.11,
+                 split >= 0.1 && < 0.3, 
                  strict == 0.3.*, 
                  text == 0.11.*
   Other-Modules:   
@@ -76,7 +76,7 @@ Executable build
   ghc-prof-options: -caf-all -auto-all
   Build-Depends: base>4, filepath>1, 
                  devadmin, configurator, text,
-                 cmdargs == 0.9.*
+                 cmdargs > 0.7 && < 0.11
 		 
 -- Executable html 
 --   Main-is: html.hs

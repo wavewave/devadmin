@@ -35,6 +35,19 @@ nameVersion = do
   v <- cabalVersion 
   return (n,v)
 
+getProjNameWithVersion :: BuildConfiguration -> String -> IO String 
+getProjNameWithVersion bc projname = do 
+  let srcbase = bc_srcbase bc 
+  cdir <- getCurrentDirectory 
+  setCurrentDirectory (srcbase </> projname) 
+  currdir <- getDirectoryContents "."
+  let cabalfile = head $ filter isCabal currdir
+  str <- readFile cabalfile 
+  let Right (name,version) = parse nameVersion "" str
+      filename = name ++ "-" ++ version
+  setCurrentDirectory cdir 
+  return filename 
+
 {-  
 versioncheck :: BuildConfiguration -> IO ()
 versioncheck bc = do 

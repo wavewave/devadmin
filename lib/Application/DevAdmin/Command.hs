@@ -42,7 +42,7 @@ commandLineProcess bc pc bparam = do
     Haddock {..}     -> do plst <- makeProjDepList bc pc [ProgProj pkgname]
                            flip mapM_ plst   (haddockJob bc)
     DepShow {..}     -> do plst <- makeProjDepList bc pc [ProgProj pkgname]
-                           flip mapM_ plst   (depshowJob bc)
+                           flip mapM_ plst   (showJob bc)
     ShowAllOrdered {..} -> do print alllst 
     DirectDepShow {..} -> do lst <- makeProjDirectDepList bc pc (ProgProj pkgname)
                              putStrLn $ show lst 
@@ -82,6 +82,6 @@ commandLineProcess bc pc bparam = do
                     --   Nothing -> alllst
                     --   Just apkg -> filterBefore apkg alllst 
       flip mapM_ alllst' (haddockSandBoxJob dir bc)
-
+      updateHtml dir bc pc 
 
 filterBefore name list = dropWhile (/= name) list  
