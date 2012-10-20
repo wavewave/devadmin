@@ -59,6 +59,7 @@ gitCloneJob bc name = do
       -- if (not.null $ c)
       --  then return () 
       --  else return ()
+  setCurrentDirectory dir 
   return () 
 
 -- | git push for a project 
@@ -91,17 +92,19 @@ showJob _bc name = do
 -- | need to be generalized
 cabalInstallJob :: BuildConfiguration -> String -> IO () 
 cabalInstallJob bc name = do 
-  putStrLn $ "update : " ++  name
-  system $ "ghc-pkg --force unregister " ++ name
-  dir <- getCurrentDirectory
-  setCurrentDirectory (dir </> bc_srcbase bc </> name)
-  excode <- system $ "cabal install"
-  case excode of 
-    ExitSuccess -> do 
-      putStrLn "successful installation"
-      putStrLn "-----------------------"
-    ExitFailure ecd -> error $ "not successful installation of " ++ name
-                               ++ " with exit code " ++ show ecd 
+    putStrLn $ "update : " ++  name
+    system $ "ghc-pkg --force unregister " ++ name
+    dir <- getCurrentDirectory
+    setCurrentDirectory (dir </> bc_srcbase bc </> name)
+    excode <- system $ "cabal install"
+    case excode of 
+      ExitSuccess -> do 
+        putStrLn "successful installation"
+        putStrLn "-----------------------"
+      ExitFailure ecd -> error $ "not successful installation of " ++ name
+                                  ++ " with exit code " ++ show ecd 
+    setCurrentDirectory dir 
+
   -- return () 
 
 
