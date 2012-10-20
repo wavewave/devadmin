@@ -38,9 +38,9 @@ gitCloneJob bc name = do
   excode <- system $ "git clone " ++ (bc_gitrepobase bc </> name <.> "git")
   case excode of 
     ExitSuccess -> do 
-      setCurrentDirectory (dir </> bc_srcbase bc </> name)
-      system $ "git remote add github " ++ (bc_gitrepobase bc </> name <.> "git")
-      system $ "git push github master"
+      -- setCurrentDirectory (dir </> bc_srcbase bc </> name)
+      -- system $ "git remote add github " ++ (bc_gitrepobase bc </> name <.> "git")
+      -- system $ "git push github master"
       return ()
       -- putStrLn "Successful. Press any key." 
       -- c <- getLine
