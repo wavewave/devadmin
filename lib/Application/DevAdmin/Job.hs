@@ -33,12 +33,13 @@ import Paths_devadmin
 gitCloneJob :: BuildConfiguration -> String -> IO ()
 gitCloneJob bc name = do 
   putStrLn $ "git clone : " ++ name
-  setCurrentDirectory (bc_srcbase bc)
-  excode <- system $ "git clone " ++ ((bc_gitrepobase bc) </> name <.> "git")
+  dir <- getCurrentDirectory
+  setCurrentDirectory (dir </> bc_srcbase bc)
+  excode <- system $ "git clone " ++ (dir </> bc_gitrepobase bc </> name <.> "git")
   case excode of 
     ExitSuccess -> do 
       setCurrentDirectory (bc_srcbase bc </> name)
-      system $ "git remote add github " ++ ((bc_gitrepobase bc) </> name <.> "git")
+      system $ "git remote add github " ++ (dir </> bc_gitrepobase bc </> name <.> "git")
       system $ "git push github master"
       putStrLn "Successful. Press any key." 
       c <- getLine
@@ -64,7 +65,8 @@ gitCloneJob bc name = do
 gitPushJob :: BuildConfiguration -> String -> IO () 
 gitPushJob bc name = do 
   putStrLn $ "git push : " ++  name
-  setCurrentDirectory ((bc_srcbase bc) </> name)
+  dir <- getCurrentDirectory 
+  setCurrentDirectory (dir </> bc_srcbase bc </> name)
   system $ "git push github master"
   return () 
 
@@ -72,7 +74,8 @@ gitPushJob bc name = do
 gitPullJob :: BuildConfiguration -> String -> IO () 
 gitPullJob bc name = do 
   putStrLn $ "git pull : " ++  name
-  setCurrentDirectory ((bc_srcbase bc) </> name)
+  dir <- getCurrentDirectory 
+  setCurrentDirectory (dir </> bc_srcbase bc </> name)
   system $ "git pull github master"
   return () 
 
@@ -89,7 +92,8 @@ cabalInstallJob :: BuildConfiguration -> String -> IO ()
 cabalInstallJob bc name = do 
   putStrLn $ "update : " ++  name
   system $ "ghc-pkg --force unregister " ++ name
-  setCurrentDirectory ((bc_srcbase bc) </> name)
+  dir <- getCurrentDirectory
+  setCurrentDirectory (dir </> bc_srcbase bc </> name)
   excode <- system $ "cabal install"
   case excode of 
     ExitSuccess -> do 
@@ -104,7 +108,8 @@ cabalInstallJob bc name = do
 haddockJob :: BuildConfiguration -> String -> IO () 
 haddockJob bc name = do 
   putStrLn $ "haddock : " ++ name 
-  setCurrentDirectory ((bc_srcbase bc) </> name)
+  dir <- getCurrentDirectory 
+  setCurrentDirectory (dir </> bc_srcbase bc </> name)
   system $ "cabal install --enable-documentation"
   system $ "cabal haddock --hyperlink-source"
   system $ "cabal copy"
@@ -117,7 +122,8 @@ cabalCleanJob :: BuildConfiguration -> String -> IO ()
 cabalCleanJob bc name = do 
   putStrLn $ "cleaning : " ++  name
   system $ "ghc-pkg --force unregister " ++ name
-  setCurrentDirectory ((bc_srcbase bc) </> name)
+  dir <- getCurrentDirectory 
+  setCurrentDirectory (dir </> bc_srcbase bc </> name)
   excode <- system $ "cabal clean"
   case excode of 
     ExitSuccess -> do 
@@ -132,7 +138,8 @@ cabalCleanJob bc name = do
 gitDiffJob :: BuildConfiguration -> String -> IO () 
 gitDiffJob bc name = do 
   putStrLn $ "git diff : " ++ name
-  setCurrentDirectory ((bc_srcbase bc) </> name)
+  dir <- getCurrentDirectory 
+  setCurrentDirectory (dir </> bc_srcbase bc </> name)
   excode <- system $ "git diff"
   case excode of 
     ExitSuccess -> do 
@@ -150,7 +157,8 @@ gitDiffJob bc name = do
 haddockSandBoxJob :: FilePath -> BuildConfiguration -> String -> IO () 
 haddockSandBoxJob fp bc name = do 
   putStrLn $ "haddock : " ++ name 
-  setCurrentDirectory ((bc_srcbase bc) </> name)
+  dir <- getCurrentDirectory 
+  setCurrentDirectory (dir </> bc_srcbase bc </> name)
   system $ "cabal-dev install --enable-documentation --sandbox="++ fp
   system $ "cabal-dev haddock --hyperlink-source --sandbox=" ++ fp 
   system $ "cabal-dev copy --sandbox=" ++ fp 
