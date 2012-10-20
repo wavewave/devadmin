@@ -83,5 +83,10 @@ commandLineProcess bc pc bparam = do
                     --   Just apkg -> filterBefore apkg alllst 
       flip mapM_ alllst' (haddockSandBoxJob dir bc)
       updateHtml dir bc pc 
+    HaddockSandBox {..} -> do 
+      plst <- makeProjDepList bc pc [ProgProj pkgname]
+      flip mapM_ plst   (haddockSandBoxJob dir bc)
+      updateHtml dir bc pc 
+
 
 filterBefore name list = dropWhile (/= name) list  

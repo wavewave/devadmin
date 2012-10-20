@@ -94,7 +94,11 @@ data Build = Install     { config :: FilePath
            | Clone    { config :: FilePath 
                       , pkgname :: String }
            | HaddockBootSandBox { config :: FilePath
-                                , dir :: FilePath }  
+                                , dir :: FilePath } 
+           | HaddockSandBox { config :: FilePath
+                            , pkgname :: String
+                            , dir :: FilePath }  
+
   --                              , mpkgname :: Maybe String }
 
              deriving (Show,Data,Typeable)
@@ -113,6 +117,12 @@ constructBuildModes = do
       push    = Push    { config = dotbuild }
       haddock = Haddock { config = dotbuild 
                         , pkgname = "" &= typ "PKGNAME" &= argPos 0 } 
+      haddocksandbox = HaddockSandBox { config = dotbuild 
+                                      , pkgname = "" &= typ "PKGNAME" &= argPos 0  
+                                      , dir = "" &= typ "DIRNAME" &= argPos 1
+--                                        , mpkgname = def &= typ "RESUMEPKG" &= args  
+                                      } 
+
       depshow = DepShow { config = dotbuild 
                         , pkgname = "" &= typ "PKGNAME" &= argPos 0 } 
       directdepshow = DirectDepShow { config = dotbuild 
@@ -154,6 +164,7 @@ constructBuildModes = do
                    , haddockboot, cleanall
                    , cloneall, clone
                    , diff
+                   , haddocksandbox
                    , haddockbootsandbox 
                    ] 
 --              whatsnew, bridge, bridgeall, createbridge,
