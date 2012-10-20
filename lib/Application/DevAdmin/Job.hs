@@ -35,29 +35,30 @@ gitCloneJob bc name = do
   putStrLn $ "git clone : " ++ name
   dir <- getCurrentDirectory
   setCurrentDirectory (dir </> bc_srcbase bc)
-  excode <- system $ "git clone " ++ (dir </> bc_gitrepobase bc </> name <.> "git")
+  excode <- system $ "git clone " ++ (bc_gitrepobase bc </> name <.> "git")
   case excode of 
     ExitSuccess -> do 
       setCurrentDirectory (bc_srcbase bc </> name)
-      system $ "git remote add github " ++ (dir </> bc_gitrepobase bc </> name <.> "git")
+      system $ "git remote add github " ++ (bc_gitrepobase bc </> name <.> "git")
       system $ "git push github master"
-      putStrLn "Successful. Press any key." 
-      c <- getLine
-      if (not.null $ c)
-        then return () 
-        else return ()
+      return ()
+      -- putStrLn "Successful. Press any key." 
+      -- c <- getLine
+      -- if (not.null $ c)
+      --  then return () 
+      --  else return ()
     ExitFailure 1 -> do 
-      putStrLn "Not successful. Press any key." 
-      c <- getLine
-      if (not.null $ c)
-        then return () 
-        else return ()
+      error "Not successful. Press any key." 
+      -- c <- getLine
+      -- if (not.null $ c)
+      --  then return () 
+      --  else return ()
     _ -> do 
-      putStrLn "Not successful. Press any key." 
-      c <- getLine
-      if (not.null $ c)
-        then return () 
-        else return ()
+      error "Not successful. Press any key." 
+      -- c <- getLine
+      -- if (not.null $ c)
+      --  then return () 
+      --  else return ()
   return () 
 
 -- | git push for a project 
