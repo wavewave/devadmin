@@ -24,7 +24,7 @@ import System.Environment
 import System.FilePath
 
 import Application.DevAdmin.Project
-
+import Application.DevAdmin.ProgType
 
 -- | 
 
@@ -48,9 +48,9 @@ data ProjectConfiguration = ProjectConfiguration {
   -- , pc_hoogleprojects :: Maybe [Project]
 } deriving (Show)
 
-withBuildFile :: ((BuildConfiguration,ProjectConfiguration) -> IO ()) -> IO ()
-withBuildFile action = do 
-  cfg <- loadConfigFile
+withBuildFile :: Build -> ((BuildConfiguration,ProjectConfiguration) -> IO ()) -> IO ()
+withBuildFile bld action = do 
+  cfg <- loadConfigFile bld
   mbc <- getBuildConfiguration cfg
   mpc <- getProjectConfiguration cfg  
   case (,) <$> mbc <*> mpc of 
@@ -58,13 +58,13 @@ withBuildFile action = do
     Just (bc,pc) -> action (bc,pc)
 
 
-loadConfigFile :: IO Config 
-loadConfigFile = do 
+loadConfigFile :: Build -> IO Config 
+loadConfigFile bld = do 
   homepath <- getEnv "HOME"
-  let dotbuild = homepath </> ".build"
+  let dotbuild = if null (config bld) then homepath </> ".build" else (config bld)
   b <- doesFileExist dotbuild 
-  when (not b) $ error "no .build file exist at $HOME directory"
-  config <- load [Required "$(HOME)/.build"]
+  when (not b) $ error $ "no " ++ dotbuild ++ " file exist at $HOME directory"
+  config <- load [Required dotbuild]
   return config
 
 liftM9 :: (Monad m) => (a1 -> a2 -> a3 -> a4 -> a5 -> a6 -> a7 -> a8 -> a9-> r ) 

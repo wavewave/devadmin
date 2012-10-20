@@ -19,7 +19,7 @@ main = do
   mode <- constructBuildModes 
   param <- cmdArgs mode 
   putStrLn $ show param 
-  cfg <- loadConfigFile 
+  cfg <- loadConfigFile param 
   mbc <- getBuildConfiguration cfg 
   mpc <- getProjectConfiguration cfg
 
