@@ -118,6 +118,7 @@ haddockJob bc name = do
   system $ "cabal haddock --hyperlink-source"
   system $ "cabal copy"
   -- versioncheck bc
+  setCurrentDirectory dir 
   return () 
 
 
