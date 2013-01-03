@@ -30,17 +30,21 @@ import Text.StringTemplate
 import Text.StringTemplate.Base
 import System.Directory
 import System.FilePath
+import System.Path (bracketCWD)
 import qualified System.IO.Strict as Strict
 import Control.Applicative
 import Data.List (find)
 import Data.Char
 import Control.Monad.Reader
-import HSH (bracketCD)
+-- import HSH (bracketCD)
 import qualified Data.Map as M
 import Text.StringTemplate.Classes
 import Safe
 import qualified System.FilePath.Find as Find
 import System.FilePath
+
+-- bracketCD :: 
+
 {- | 
 Chooses a template from an STGroup, or errors if not found.
 
@@ -88,7 +92,7 @@ The top group has key \".\" (mnemonic, current directory), other groups have key
 -} 
 
 directoryGroups' :: (FilePath -> IO a) -> FilePath -> IO (M.Map FilePath a)
-directoryGroups' f' d = bracketCD d $ do
+directoryGroups' f' d = bracketCWD d $ do
                            subDirs <- findDirectories $ "." 
                            return . M.fromList =<< mapM f subDirs                               
   where 
