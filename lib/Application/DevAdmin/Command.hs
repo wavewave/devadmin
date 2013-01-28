@@ -27,7 +27,7 @@ commandLineProcess bc pc bparam = do
   alllst <- makeProjDepList bc pc projects 
   case bparam of 
     Install {..}     -> do plst <- makeProjDepList bc pc [ProgProj pkgname] 
-                           flip mapM_ plst   (cabalInstallJob bc)
+                           flip mapM_ plst   (cabalInstallJob bc option)
     InstallSeg {..}  -> do plst <- makeProjDepList bc pc (map ProgProj [pkgnamemother]) 
                            -- putStrLn $ show plst 
                            mmap <- (constructMotherMap bc pc)
@@ -37,7 +37,7 @@ commandLineProcess bc pc bparam = do
                              Just allmothers -> do 
                                let flst = intersect plst (pkgnamedest:allmothers)
                                (putStrLn.show) flst 
-                               flip mapM_ flst (cabalInstallJob bc)
+                               flip mapM_ flst (cabalInstallJob bc Nothing)
     Push    {..}     ->    flip mapM_ alllst (gitPushJob bc)
     Haddock {..}     -> do plst <- makeProjDepList bc pc [ProgProj pkgname]
                            flip mapM_ plst   (haddockJob bc)
@@ -58,7 +58,7 @@ commandLineProcess bc pc bparam = do
       let alllst' = case mpkgname of 
                       Nothing -> alllst
                       Just apkg -> filterBefore apkg alllst 
-      flip mapM_ alllst' (cabalInstallJob bc)
+      flip mapM_ alllst' (cabalInstallJob bc Nothing)
     HaddockBoot {..} -> do 
       let alllst' = case mpkgname of 
                       Nothing -> alllst
