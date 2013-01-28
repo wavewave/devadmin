@@ -90,13 +90,15 @@ showJob _bc name = do
 
 
 -- | need to be generalized
-cabalInstallJob :: BuildConfiguration -> String -> IO () 
-cabalInstallJob bc name = do 
+cabalInstallJob :: BuildConfiguration -> Maybe String -> String -> IO () 
+cabalInstallJob bc mopt name = do 
     putStrLn $ "update : " ++  name
     system $ "ghc-pkg --force unregister " ++ name
     dir <- getCurrentDirectory
     setCurrentDirectory (dir </> bc_srcbase bc </> name)
-    excode <- system $ "cabal install"
+    let cmd = "cabal install " ++ (maybe "" id mopt)
+    putStrLn $ " Command : " ++ cmd 
+    excode <- system cmd
     case excode of 
       ExitSuccess -> do 
         putStrLn "successful installation"

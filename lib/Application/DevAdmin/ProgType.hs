@@ -59,7 +59,9 @@ import System.FilePath
 -- | 
 
 data Build = Install     { config :: FilePath 
-                         , pkgname :: String }
+                         , pkgname :: String 
+                         , option :: Maybe String 
+                         }
            | InstallSeg  { config :: FilePath 
                          , pkgnamemother :: String 
                          , pkgnamedest :: String } 
@@ -110,7 +112,8 @@ constructBuildModes = do
   homedir <- getEnv "HOME"
   let dotbuild = homedir </> ".build"
   let install = Install { config = dotbuild 
-                        , pkgname = "" &= typ "PKGNAME" &= argPos 0 }
+                        , pkgname = "" &= typ "PKGNAME" &= argPos 0 
+                        , option = Nothing &= typ "OPTION" }
       installseg = InstallSeg { config = dotbuild 
                               , pkgnamemother = "" &= typ "PKGMOTHER" &= argPos 0 
                               , pkgnamedest = "" &= typ "PKGDEST" &= argPos 1 }
