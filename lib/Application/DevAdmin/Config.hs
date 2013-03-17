@@ -29,23 +29,13 @@ import Application.DevAdmin.ProgType
 -- | 
 
 data BuildConfiguration = BuildConfiguration { 
-  -- bc_darcsrepobase :: String,
-  -- bc_progbase :: FilePath, 
-  -- bc_workspacebase :: FilePath, 
-  -- bc_linkbase :: FilePath, 
-  -- bc_docbase :: FilePath, 
-  -- bc_hoogleDatabase :: FilePath, 
-  -- bc_bridgebase :: FilePath, 
-  -- bc_gitbase :: FilePath, 
-  -- bc_emacsserver :: String, 
   bc_srcbase :: FilePath, 
-  bc_gitrepobase :: FilePath
+  bc_gitrepobase :: FilePath, 
+  bc_ispushable :: Bool 
 } deriving (Show)
 
 data ProjectConfiguration = ProjectConfiguration { 
   pc_projects :: [Project]
-  -- , pc_bridgeprojects :: [Project]
-  -- , pc_hoogleprojects :: Maybe [Project]
 } deriving (Show)
 
 withBuildFile :: Build -> ((BuildConfiguration,ProjectConfiguration) -> IO ()) -> IO ()
@@ -75,30 +65,10 @@ liftM9 f m1 m2 m3 m4 m5 m6 m7 m8 m9 =
 
 getBuildConfiguration :: Config -> IO (Maybe BuildConfiguration)
 getBuildConfiguration c  = do 
-    -- mdarcsrepobase <- C.lookup c "build.darcsrepobase"
-    -- mprogbase      <- C.lookup c "build.progbase"
-    -- mworkspacebase <- C.lookup c "build.workspacebase"
-    -- mlinkbase      <- C.lookup c "build.linkbase"
-    -- mdocbase       <- C.lookup c "build.docbase"
-    -- mhoogle        <- C.lookup c "build.hoogle"
-    -- mbridge        <- C.lookup c "build.bridge"
-    -- mgit           <- C.lookup c "build.git"
-    -- memacsserver   <- C.lookup c "build.emacsserver"
     msrcbase       <- C.lookup c "build.srcbase"
     mgitrepobase   <- C.lookup c "build.gitrepobase"
-    return ( BuildConfiguration <$> msrcbase <*> mgitrepobase ) 
-
-                                 -- <$> mdarcsrepobase
-                                -- <*> mprogbase
-                                -- <*> mworkspacebase
-                                -- <*> mlinkbase
-                                -- <*> mdocbase
-                                -- <*> mhoogle
-                                -- <*> mbridge
-                                -- <*> mgit
-                                -- <*> memacsserver 
-                                -- <*> msrcbase
-                                -- <*> mgitrepobase )
+    mispushable    <- C.lookup c "build.ispushable"
+    return ( BuildConfiguration <$> msrcbase <*> mgitrepobase <*> mispushable) 
 
 
 
@@ -106,6 +76,3 @@ getProjectConfiguration :: Config -> IO (Maybe ProjectConfiguration)
 getProjectConfiguration c  = 
   liftM ProjectConfiguration 
   <$> C.lookup c "projects"
-  -- <*> C.lookup c "bridgeproj"
-  -- <*> (C.lookup c "hoogleproj" >>= return . pure ) 
-

@@ -2,7 +2,7 @@
 -----------------------------------------------------------------------------
 -- |
 -- Module      : Application.DevAdmin.Job 
--- Copyright   : (c) 2011, 2012 Ian-Woo Kim
+-- Copyright   : (c) 2011-2013 Ian-Woo Kim
 --
 -- License     : BSD3
 -- Maintainer  : Ian-Woo Kim <ianwookim@gmail.com>
@@ -14,18 +14,18 @@
 module Application.DevAdmin.Job where
 
 import Control.Applicative
-
+import Control.Monad (when)
 import System.Directory
-import System.Process
-import System.FilePath
 import System.Exit 
-
+import System.FilePath
+import System.Process
 import Text.StringTemplate
 import Text.StringTemplate.Helpers
-
+-- 
 import Application.DevAdmin.Config
 import Application.DevAdmin.Project
 import Application.DevAdmin.VersionCheck
+--
 import Paths_devadmin
 
 -- | git clone 
@@ -38,10 +38,12 @@ gitCloneJob bc name = do
   excode <- system $ "git clone " ++ (bc_gitrepobase bc </> name <.> "git")
   case excode of 
     ExitSuccess -> do 
-      -- setCurrentDirectory (dir </> bc_srcbase bc </> name)
-      -- system $ "git remote add github " ++ (bc_gitrepobase bc </> name <.> "git")
+      when (bc_ispushable bc) $ do 
+        setCurrentDirectory (dir </> bc_srcbase bc </> name)
+        system $ "git remote add github " ++ (bc_gitrepobase bc </> name <.> "git")
+        return ()
       -- system $ "git push github master"
-      return ()
+
       -- putStrLn "Successful. Press any key." 
       -- c <- getLine
       -- if (not.null $ c)
