@@ -15,8 +15,9 @@ data Project = -- WorkspaceProj { workspacename :: String, projname :: ProjName 
 instance Configured Project where
   convert (String txt) = Just (ProgProj (unpack txt))
   convert _ = Nothing 
-instance Configured [Project] where
-  convert (List vs) = mapM convert vs 
+
+-- instance Configured [Project] where
+--   convert (List vs) = mapM convert vs 
 
 -- | Part of projects that are availabe in haddock 
 --

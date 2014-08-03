@@ -37,18 +37,16 @@ Library
                  containers, 
                  fgl, 
                  time, 
-                 filemanip == 0.3.*,
-                 safe == 0.3.*,
+                 filemanip,
+                 safe,
                  MissingH,
-                 -- HSH == 2.0.*,
-                 -- HStringTemplateHelpersIW, 
                  HStringTemplate, 
-                 parsec > 3 && < 4, 
-                 configurator == 0.2.*, 
-                 cmdargs > 0.7 && < 0.11,
-                 split >= 0.1 && < 0.3, 
-                 strict == 0.3.*, 
-                 text == 0.11.*
+                 parsec, 
+                 configurator, 
+                 cmdargs,
+                 split, 
+                 strict, 
+                 text
   Other-Modules:   
                    Paths_devadmin 
   exposed-modules: Application.DevAdmin.Cabal 
